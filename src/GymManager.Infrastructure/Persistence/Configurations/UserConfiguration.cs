@@ -4,96 +4,70 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad User
-/// </summary>
+// ============================================================
+// USERS (05_users.sql)
+// ============================================================
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Users", "gym");
+        builder.ToTable("users");
 
-        // Clave primaria
         builder.HasKey(u => u.UserId);
 
-        // Propiedades
-        builder.Property(u => u.UserId)
-            .HasColumnName("UserId")
-            .IsRequired();
-
-        builder.Property(u => u.BranchId)
-            .HasColumnName("BranchId")
-            .IsRequired();
-
+        // C#: Username -> SQL: employee_code (mapeo aproximado)
         builder.Property(u => u.Username)
-            .HasColumnName("Username")
-            .HasMaxLength(50)
-            .IsRequired();
-
-        builder.Property(u => u.Email)
-            .HasColumnName("Email")
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder.Property(u => u.PasswordHash)
-            .HasColumnName("PasswordHash")
-            .HasMaxLength(255)
-            .IsRequired();
-
-        builder.Property(u => u.FullName)
-            .HasColumnName("FullName")
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder.Property(u => u.Phone)
-            .HasColumnName("Phone")
+            .HasColumnName("employee_code")
             .HasMaxLength(20);
 
+        builder.Property(u => u.Email)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(u => u.PasswordHash)
+            .IsRequired()
+            .HasMaxLength(255);
+
+        // C#: FullName -> SQL tiene first_name y last_name separados
+        // Mapeamos a first_name (SQL concatenara o ajustaremos despues)
+        builder.Property(u => u.FullName)
+            .HasColumnName("first_name")
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(u => u.Phone)
+            .HasMaxLength(20);
+
+        // C#: AvatarBase64 -> SQL: avatar_path
         builder.Property(u => u.AvatarBase64)
-            .HasColumnName("AvatarBase64");
+            .HasColumnName("avatar_path")
+            .HasMaxLength(500);
 
         builder.Property(u => u.LastLoginAt)
-            .HasColumnName("LastLoginAt");
+            .HasColumnName("last_login_at");
 
         builder.Property(u => u.FailedLoginAttempts)
-            .HasColumnName("FailedLoginAttempts")
-            .HasDefaultValue(0);
+            .HasColumnName("failed_login_attempts");
 
+        // C#: LockoutUntil -> SQL: locked_until
         builder.Property(u => u.LockoutUntil)
-            .HasColumnName("LockoutUntil");
+            .HasColumnName("locked_until");
 
-        // Campos de auditoría
-        builder.Property(u => u.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
-
-        builder.Property(u => u.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(u => u.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(u => u.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(u => u.Username)
-            .IsUnique()
-            .HasDatabaseName("IX_Users_Username");
-
-        builder.HasIndex(u => u.Email)
-            .IsUnique()
-            .HasDatabaseName("IX_Users_Email");
-
-        builder.HasIndex(u => u.BranchId)
-            .HasDatabaseName("IX_Users_BranchId");
+        // Indices
+        builder.HasIndex(u => u.Email).IsUnique();
+        builder.HasIndex(u => u.Username).IsUnique();
 
         // Relaciones
         builder.HasOne(u => u.Branch)
             .WithMany(b => b.Users)
             .HasForeignKey(u => u.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Ignorar propiedades de auditoria que no existen
+        builder.Ignore(u => u.DeletedBy);
+        builder.Ignore(u => u.IsDeleted);
+
+        // Filtro soft delete
+        builder.HasQueryFilter(u => u.DeletedAt == null);
     }
 }

@@ -6,83 +6,42 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
 /// <summary>
-/// Configuración de Entity Framework para la entidad License
+/// Configuracion de la entidad License para EF Core
+/// Basado en: 01_licenses.sql
 /// </summary>
 public class LicenseConfiguration : IEntityTypeConfiguration<License>
 {
     public void Configure(EntityTypeBuilder<License> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Licenses", "gym");
+        builder.ToTable("licenses");
 
-        // Clave primaria
         builder.HasKey(l => l.LicenseId);
 
         // Propiedades
-        builder.Property(l => l.LicenseId)
-            .HasColumnName("LicenseId")
-            .IsRequired();
-
         builder.Property(l => l.LicenseKey)
-            .HasColumnName("LicenseKey")
-            .HasMaxLength(500)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(256);
 
         builder.Property(l => l.HardwareId)
-            .HasColumnName("HardwareId")
-            .HasMaxLength(256)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(128);
 
+        // Enum a string
         builder.Property(l => l.LicenseType)
-            .HasColumnName("LicenseType")
-            .HasConversion<string>()
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasConversion(
+                v => v.ToString().ToUpper(),
+                v => Enum.Parse<LicenseType>(v, true))
+            .HasMaxLength(20);
 
-        builder.Property(l => l.MaxBranches)
-            .HasColumnName("MaxBranches")
-            .HasDefaultValue(1);
+        // Indices
+        builder.HasIndex(l => l.LicenseKey).IsUnique();
+        builder.HasIndex(l => l.HardwareId).IsUnique();
 
-        builder.Property(l => l.MaxUsers)
-            .HasColumnName("MaxUsers")
-            .HasDefaultValue(3);
+        // Ignorar propiedades de AuditableEntity que no existen en SQL
+        builder.Ignore(l => l.DeletedBy);
+        builder.Ignore(l => l.IsDeleted);
 
-        builder.Property(l => l.IssuedAt)
-            .HasColumnName("IssuedAt")
-            .IsRequired();
-
-        builder.Property(l => l.ExpiresAt)
-            .HasColumnName("ExpiresAt");
-
-        builder.Property(l => l.LastValidation)
-            .HasColumnName("LastValidation");
-
-        builder.Property(l => l.ValidationCount)
-            .HasColumnName("ValidationCount")
-            .HasDefaultValue(0);
-
-        // Campos de auditoría
-        builder.Property(l => l.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
-
-        builder.Property(l => l.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(l => l.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(l => l.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(l => l.HardwareId)
-            .IsUnique()
-            .HasDatabaseName("IX_Licenses_HardwareId");
-
-        builder.HasIndex(l => l.LicenseKey)
-            .IsUnique()
-            .HasDatabaseName("IX_Licenses_LicenseKey");
+        // Filtro soft delete
+        builder.HasQueryFilter(l => l.DeletedAt == null);
     }
 }

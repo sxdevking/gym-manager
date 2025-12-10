@@ -4,75 +4,52 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad InventoryStock
-/// </summary>
+// ============================================================
+// INVENTORY STOCK (15_inventory_stock.sql)
+// ============================================================
 public class InventoryStockConfiguration : IEntityTypeConfiguration<InventoryStock>
 {
     public void Configure(EntityTypeBuilder<InventoryStock> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("InventoryStock", "gym");
+        builder.ToTable("inventorystock");
 
-        // Clave primaria
         builder.HasKey(i => i.StockId);
 
-        // Propiedades
-        builder.Property(i => i.StockId)
-            .HasColumnName("StockId")
-            .IsRequired();
-
-        builder.Property(i => i.ProductId)
-            .HasColumnName("ProductId")
-            .IsRequired();
-
-        builder.Property(i => i.BranchId)
-            .HasColumnName("BranchId")
-            .IsRequired();
-
+        // C#: Quantity -> SQL: quantity_available
         builder.Property(i => i.Quantity)
-            .HasColumnName("Quantity")
-            .HasDefaultValue(0);
+            .HasColumnName("quantity_available");
 
+        // C#: RentedQuantity -> SQL: quantity_reserved
         builder.Property(i => i.RentedQuantity)
-            .HasColumnName("RentedQuantity")
-            .HasDefaultValue(0);
+            .HasColumnName("quantity_reserved");
 
+        // C#: LastRestockDate -> SQL: last_restock_at
         builder.Property(i => i.LastRestockDate)
-            .HasColumnName("LastRestockDate");
+            .HasColumnName("last_restock_at");
 
-        // Ignorar propiedades calculadas
-        builder.Ignore(i => i.AvailableQuantity);
-
-        // Campos de auditoría
-        builder.Property(i => i.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
-
-        builder.Property(i => i.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(i => i.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(i => i.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(i => new { i.ProductId, i.BranchId })
-            .IsUnique()
-            .HasDatabaseName("IX_InventoryStock_ProductId_BranchId");
+        // Indice unico
+        builder.HasIndex(i => new { i.ProductId, i.BranchId }).IsUnique();
 
         // Relaciones
         builder.HasOne(i => i.Product)
             .WithMany(p => p.InventoryStocks)
             .HasForeignKey(i => i.ProductId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(i => i.Branch)
             .WithMany(b => b.InventoryStocks)
             .HasForeignKey(i => i.BranchId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Ignorar propiedades de auditoria y calculadas
+        builder.Ignore(i => i.DeletedBy);
+        builder.Ignore(i => i.IsDeleted);
+        builder.Ignore(i => i.DeletedAt);
+        builder.Ignore(i => i.CreatedAt);
+        builder.Ignore(i => i.CreatedBy);
+        builder.Ignore(i => i.AvailableQuantity); // Propiedad calculada
+
+        // Filtro soft delete
+        builder.HasQueryFilter(i => i.DeletedAt == null);
     }
 }

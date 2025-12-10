@@ -4,93 +4,57 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad SaleItem
-/// </summary>
+// ============================================================
+// SALE ITEMS (17_sale_items.sql)
+// ============================================================
 public class SaleItemConfiguration : IEntityTypeConfiguration<SaleItem>
 {
     public void Configure(EntityTypeBuilder<SaleItem> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("SaleItems", "gym");
+        builder.ToTable("saleitems");
 
-        // Clave primaria
         builder.HasKey(si => si.SaleItemId);
 
-        // Propiedades
-        builder.Property(si => si.SaleItemId)
-            .HasColumnName("SaleItemId")
-            .IsRequired();
-
-        builder.Property(si => si.SaleId)
-            .HasColumnName("SaleId")
-            .IsRequired();
-
-        builder.Property(si => si.ProductId)
-            .HasColumnName("ProductId")
-            .IsRequired();
-
         builder.Property(si => si.Quantity)
-            .HasColumnName("Quantity")
-            .HasDefaultValue(1);
+            .IsRequired();
 
         builder.Property(si => si.UnitPrice)
-            .HasColumnName("UnitPrice")
-            .HasPrecision(10, 2)
-            .IsRequired();
-
-        builder.Property(si => si.Discount)
-            .HasColumnName("Discount")
-            .HasPrecision(10, 2)
-            .HasDefaultValue(0);
-
-        builder.Property(si => si.Subtotal)
-            .HasColumnName("Subtotal")
-            .HasPrecision(10, 2)
-            .IsRequired();
-
-        builder.Property(si => si.IsRental)
-            .HasColumnName("IsRental")
-            .HasDefaultValue(false);
-
-        builder.Property(si => si.RentalReturnDate)
-            .HasColumnName("RentalReturnDate");
-
-        builder.Property(si => si.ActualReturnDate)
-            .HasColumnName("ActualReturnDate");
-
-        builder.Property(si => si.DepositAmount)
-            .HasColumnName("DepositAmount")
             .HasPrecision(10, 2);
 
-        builder.Property(si => si.DepositReturned)
-            .HasColumnName("DepositReturned")
-            .HasDefaultValue(false);
+        // C#: Discount -> SQL: discount_amount
+        builder.Property(si => si.Discount)
+            .HasColumnName("discount_amount")
+            .HasPrecision(10, 2);
 
-        // Ignorar propiedades calculadas
-        builder.Ignore(si => si.IsPendingReturn);
+        // C#: Subtotal -> SQL: line_total
+        builder.Property(si => si.Subtotal)
+            .HasColumnName("line_total")
+            .HasPrecision(10, 2);
 
-        // Campos de auditoría
-        builder.Property(si => si.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        builder.Property(si => si.IsRental)
+            .HasColumnName("is_rental");
 
-        builder.Property(si => si.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
+        // C#: RentalReturnDate -> SQL: rental_expected_return
+        builder.Property(si => si.RentalReturnDate)
+            .HasColumnName("rental_expected_return");
 
-        builder.Property(si => si.UpdatedAt)
-            .HasColumnName("UpdatedAt");
+        // C#: ActualReturnDate -> SQL: rental_actual_return
+        builder.Property(si => si.ActualReturnDate)
+            .HasColumnName("rental_actual_return");
 
-        builder.Property(si => si.DeletedAt)
-            .HasColumnName("DeletedAt");
+        // C#: DepositAmount -> SQL: rental_deposit_paid
+        builder.Property(si => si.DepositAmount)
+            .HasColumnName("rental_deposit_paid")
+            .HasPrecision(10, 2);
 
-        // Índices
-        builder.HasIndex(si => si.SaleId)
-            .HasDatabaseName("IX_SaleItems_SaleId");
+        // C#: DepositReturned -> SQL: rental_deposit_returned (es decimal, no bool)
+        // Ignoramos porque los tipos no coinciden
+        builder.Ignore(si => si.DepositReturned);
 
-        builder.HasIndex(si => si.ProductId)
-            .HasDatabaseName("IX_SaleItems_ProductId");
+        // Indices
+        builder.HasIndex(si => si.SaleId);
+        builder.HasIndex(si => si.ProductId);
+        builder.HasIndex(si => si.IsRental);
 
         // Relaciones
         builder.HasOne(si => si.Sale)
@@ -102,5 +66,18 @@ public class SaleItemConfiguration : IEntityTypeConfiguration<SaleItem>
             .WithMany(p => p.SaleItems)
             .HasForeignKey(si => si.ProductId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Ignorar propiedades de auditoria y calculadas
+        builder.Ignore(si => si.DeletedBy);
+        builder.Ignore(si => si.IsDeleted);
+        builder.Ignore(si => si.DeletedAt);
+        builder.Ignore(si => si.UpdatedAt);
+        builder.Ignore(si => si.UpdatedBy);
+        builder.Ignore(si => si.CreatedAt);
+        builder.Ignore(si => si.CreatedBy);
+        builder.Ignore(si => si.IsPendingReturn); // Propiedad calculada
+
+        // Filtro soft delete
+        builder.HasQueryFilter(si => si.DeletedAt == null);
     }
 }

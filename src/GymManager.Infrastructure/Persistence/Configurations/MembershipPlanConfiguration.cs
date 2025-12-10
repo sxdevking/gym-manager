@@ -4,79 +4,55 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad MembershipPlan
-/// </summary>
+// ============================================================
+// MEMBERSHIP PLANS (08_membership_plans.sql)
+// ============================================================
 public class MembershipPlanConfiguration : IEntityTypeConfiguration<MembershipPlan>
 {
     public void Configure(EntityTypeBuilder<MembershipPlan> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("MembershipPlans", "gym");
+        builder.ToTable("membershipplans");
 
-        // Clave primaria
         builder.HasKey(mp => mp.PlanId);
 
-        // Propiedades
-        builder.Property(mp => mp.PlanId)
-            .HasColumnName("PlanId")
-            .IsRequired();
-
-        builder.Property(mp => mp.BranchId)
-            .HasColumnName("BranchId");
-
+        // C#: Name -> SQL: plan_name
         builder.Property(mp => mp.Name)
-            .HasColumnName("Name")
-            .HasMaxLength(100)
-            .IsRequired();
+            .HasColumnName("plan_name")
+            .IsRequired()
+            .HasMaxLength(100);
 
         builder.Property(mp => mp.Description)
-            .HasColumnName("Description")
-            .HasMaxLength(500);
+            .HasColumnType("text");
 
         builder.Property(mp => mp.DurationDays)
-            .HasColumnName("DurationDays")
             .IsRequired();
 
         builder.Property(mp => mp.Price)
-            .HasColumnName("Price")
-            .HasPrecision(10, 2)
-            .IsRequired();
+            .HasPrecision(10, 2);
 
+        // C#: FreezeDaysAllowed -> SQL: max_freezing_days
         builder.Property(mp => mp.FreezeDaysAllowed)
-            .HasColumnName("FreezeDaysAllowed")
-            .HasDefaultValue(0);
+            .HasColumnName("max_freezing_days");
 
+        // C#: ClassAccessLimit -> SQL: max_classes_per_week
         builder.Property(mp => mp.ClassAccessLimit)
-            .HasColumnName("ClassAccessLimit");
+            .HasColumnName("max_classes_per_week");
 
+        // C#: IsAvailable -> SQL: is_active
         builder.Property(mp => mp.IsAvailable)
-            .HasColumnName("IsAvailable")
-            .HasDefaultValue(true);
-
-        // Campos de auditoría
-        builder.Property(mp => mp.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
-
-        builder.Property(mp => mp.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(mp => mp.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(mp => mp.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(mp => mp.BranchId)
-            .HasDatabaseName("IX_MembershipPlans_BranchId");
+            .HasColumnName("is_active");
 
         // Relaciones
         builder.HasOne(mp => mp.Branch)
             .WithMany(b => b.MembershipPlans)
             .HasForeignKey(mp => mp.BranchId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Ignorar propiedades de auditoria que no existen
+        builder.Ignore(mp => mp.DeletedBy);
+        builder.Ignore(mp => mp.IsDeleted);
+
+        // Filtro soft delete
+        builder.HasQueryFilter(mp => mp.DeletedAt == null);
     }
 }

@@ -4,55 +4,38 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad PaymentMethod
-/// </summary>
+// ============================================================
+// PAYMENT METHODS (11_payment_methods.sql)
+// ============================================================
 public class PaymentMethodConfiguration : IEntityTypeConfiguration<PaymentMethod>
 {
     public void Configure(EntityTypeBuilder<PaymentMethod> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("PaymentMethods", "gym");
+        builder.ToTable("paymentmethods");
 
-        // Clave primaria
         builder.HasKey(pm => pm.PaymentMethodId);
 
-        // Propiedades
-        builder.Property(pm => pm.PaymentMethodId)
-            .HasColumnName("PaymentMethodId")
-            .IsRequired();
-
+        // C#: Name -> SQL: method_name
         builder.Property(pm => pm.Name)
-            .HasColumnName("Name")
-            .HasMaxLength(50)
-            .IsRequired();
+            .HasColumnName("method_name")
+            .IsRequired()
+            .HasMaxLength(50);
 
         builder.Property(pm => pm.Description)
-            .HasColumnName("Description")
             .HasMaxLength(255);
 
         builder.Property(pm => pm.RequiresReference)
-            .HasColumnName("RequiresReference")
-            .HasDefaultValue(false);
+            .HasColumnName("requires_reference");
 
-        // Campos de auditoría
-        builder.Property(pm => pm.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        // Indices
+        builder.HasIndex(pm => pm.Name).IsUnique();
 
-        builder.Property(pm => pm.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(pm => pm.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(pm => pm.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(pm => pm.Name)
-            .IsUnique()
-            .HasDatabaseName("IX_PaymentMethods_Name");
+        // Ignorar propiedades de auditoria
+        builder.Ignore(pm => pm.DeletedBy);
+        builder.Ignore(pm => pm.IsDeleted);
+        builder.Ignore(pm => pm.DeletedAt);
+        builder.Ignore(pm => pm.UpdatedAt);
+        builder.Ignore(pm => pm.UpdatedBy);
+        builder.Ignore(pm => pm.CreatedBy);
     }
 }

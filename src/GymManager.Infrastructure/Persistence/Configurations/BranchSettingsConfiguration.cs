@@ -4,66 +4,53 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad BranchSettings
-/// </summary>
+// ============================================================
+// BRANCH SETTINGS (03_branch_settings.sql)
+// ============================================================
 public class BranchSettingsConfiguration : IEntityTypeConfiguration<BranchSettings>
 {
     public void Configure(EntityTypeBuilder<BranchSettings> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("BranchSettings", "gym");
+        builder.ToTable("branchsettings");
 
-        // Clave primaria (misma que BranchId - relación 1:1)
+        // La PK en SQL es setting_id, pero en C# usamos BranchId
+        // Necesitamos mapear correctamente
         builder.HasKey(bs => bs.BranchId);
 
         // Propiedades
-        builder.Property(bs => bs.BranchId)
-            .HasColumnName("BranchId")
-            .IsRequired();
-
         builder.Property(bs => bs.BusinessName)
-            .HasColumnName("BusinessName")
-            .HasMaxLength(100);
+            .HasMaxLength(150);
 
+        // C#: LogoBase64 -> SQL: logo_path
         builder.Property(bs => bs.LogoBase64)
-            .HasColumnName("LogoBase64");
+            .HasColumnName("logo_path")
+            .HasMaxLength(500);
 
         builder.Property(bs => bs.PrimaryColor)
-            .HasColumnName("PrimaryColor")
-            .HasMaxLength(7)
-            .HasDefaultValue("#3B82F6");
+            .HasMaxLength(7);
 
         builder.Property(bs => bs.SecondaryColor)
-            .HasColumnName("SecondaryColor")
-            .HasMaxLength(7)
-            .HasDefaultValue("#1E293B");
+            .HasMaxLength(7);
 
         builder.Property(bs => bs.ReceiptFooter)
-            .HasColumnName("ReceiptFooter")
-            .HasMaxLength(500);
+            .HasColumnType("text");
 
         builder.Property(bs => bs.TaxId)
-            .HasColumnName("TaxId")
-            .HasMaxLength(20);
+            .HasMaxLength(50);
 
+        // C#: TicketInfo -> SQL: receipt_header (mapeo aproximado)
         builder.Property(bs => bs.TicketInfo)
-            .HasColumnName("TicketInfo")
-            .HasMaxLength(500);
+            .HasColumnName("receipt_header")
+            .HasColumnType("text");
 
-        // Campos de auditoría
-        builder.Property(bs => bs.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        // Ignorar propiedades de auditoria que no existen
+        builder.Ignore(bs => bs.DeletedBy);
+        builder.Ignore(bs => bs.IsDeleted);
+        builder.Ignore(bs => bs.DeletedAt);
+        builder.Ignore(bs => bs.CreatedBy);
+        builder.Ignore(bs => bs.UpdatedBy);
 
-        builder.Property(bs => bs.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(bs => bs.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(bs => bs.DeletedAt)
-            .HasColumnName("DeletedAt");
+        // Filtro soft delete
+        builder.HasQueryFilter(bs => bs.DeletedAt == null);
     }
 }

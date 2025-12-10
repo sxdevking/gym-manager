@@ -6,77 +6,42 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
 /// <summary>
-/// Configuración de Entity Framework para la entidad Attendance
+/// Configuracion EF Core para la entidad Attendance
 /// </summary>
 public class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
 {
     public void Configure(EntityTypeBuilder<Attendance> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Attendances", "gym");
+        builder.ToTable("attendances");
 
-        // Clave primaria
         builder.HasKey(a => a.AttendanceId);
 
-        // Propiedades
-        builder.Property(a => a.AttendanceId)
-            .HasColumnName("AttendanceId")
-            .IsRequired();
-
-        builder.Property(a => a.MemberId)
-            .HasColumnName("MemberId")
-            .IsRequired();
-
-        builder.Property(a => a.BranchId)
-            .HasColumnName("BranchId")
-            .IsRequired();
-
+        // C#: CheckInTime -> SQL: check_in_at
         builder.Property(a => a.CheckInTime)
-            .HasColumnName("CheckInTime")
+            .HasColumnName("check_in_at")
             .IsRequired();
 
+        // C#: CheckOutTime -> SQL: check_out_at
         builder.Property(a => a.CheckOutTime)
-            .HasColumnName("CheckOutTime");
+            .HasColumnName("check_out_at");
 
+        // Enum CheckInMethod
         builder.Property(a => a.CheckInMethod)
-            .HasColumnName("CheckInMethod")
-            .HasConversion<string>()
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasConversion(
+                v => v.ToString().ToUpper(),
+                v => Enum.Parse<CheckInMethod>(v, true))
+            .HasMaxLength(20);
 
-        builder.Property(a => a.DurationMinutes)
-            .HasColumnName("DurationMinutes");
+        builder.Property(a => a.DurationMinutes);
 
         builder.Property(a => a.Notes)
-            .HasColumnName("Notes");
+            .HasMaxLength(255);
 
-        // Ignorar propiedades calculadas
-        builder.Ignore(a => a.IsCurrentlyInGym);
-
-        // Campos de auditoría
-        builder.Property(a => a.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
-
-        builder.Property(a => a.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(a => a.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(a => a.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(a => a.MemberId)
-            .HasDatabaseName("IX_Attendances_MemberId");
-
-        builder.HasIndex(a => a.BranchId)
-            .HasDatabaseName("IX_Attendances_BranchId");
-
-        builder.HasIndex(a => a.CheckInTime)
-            .HasDatabaseName("IX_Attendances_CheckInTime");
+        // Indices
+        builder.HasIndex(a => a.MemberId);
+        builder.HasIndex(a => a.BranchId);
+        builder.HasIndex(a => a.CheckInTime);
+        builder.HasIndex(a => new { a.BranchId, a.CheckInTime });
 
         // Relaciones
         builder.HasOne(a => a.Member)
@@ -88,5 +53,13 @@ public class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
             .WithMany()
             .HasForeignKey(a => a.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Ignorar propiedades de auditoria y calculadas
+        builder.Ignore(a => a.DeletedBy);
+        builder.Ignore(a => a.IsDeleted);
+        builder.Ignore(a => a.IsCurrentlyInGym);
+
+        // Filtro soft delete
+        builder.HasQueryFilter(a => a.DeletedAt == null);
     }
 }

@@ -5,106 +5,66 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad Sale
-/// </summary>
+// ============================================================
+// SALES (16_sales.sql)
+// ============================================================
 public class SaleConfiguration : IEntityTypeConfiguration<Sale>
 {
     public void Configure(EntityTypeBuilder<Sale> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Sales", "gym");
+        builder.ToTable("sales");
 
-        // Clave primaria
         builder.HasKey(s => s.SaleId);
 
-        // Propiedades
-        builder.Property(s => s.SaleId)
-            .HasColumnName("SaleId")
-            .IsRequired();
-
-        builder.Property(s => s.BranchId)
-            .HasColumnName("BranchId")
-            .IsRequired();
-
-        builder.Property(s => s.MemberId)
-            .HasColumnName("MemberId");
-
-        builder.Property(s => s.UserId)
-            .HasColumnName("UserId")
-            .IsRequired();
-
-        builder.Property(s => s.PaymentMethodId)
-            .HasColumnName("PaymentMethodId")
-            .IsRequired();
-
         builder.Property(s => s.TicketNumber)
-            .HasColumnName("TicketNumber")
-            .HasMaxLength(50)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(30);
 
         builder.Property(s => s.SaleDate)
-            .HasColumnName("SaleDate")
             .IsRequired();
 
         builder.Property(s => s.Subtotal)
-            .HasColumnName("Subtotal")
-            .HasPrecision(10, 2)
-            .IsRequired();
+            .HasPrecision(10, 2);
 
         builder.Property(s => s.DiscountAmount)
-            .HasColumnName("DiscountAmount")
-            .HasPrecision(10, 2)
-            .HasDefaultValue(0);
+            .HasPrecision(10, 2);
 
         builder.Property(s => s.TaxAmount)
-            .HasColumnName("TaxAmount")
-            .HasPrecision(10, 2)
-            .HasDefaultValue(0);
+            .HasPrecision(10, 2);
 
+        // C#: Total -> SQL: total_amount
         builder.Property(s => s.Total)
-            .HasColumnName("Total")
-            .HasPrecision(10, 2)
-            .IsRequired();
+            .HasColumnName("total_amount")
+            .HasPrecision(10, 2);
 
+        // Enum Status
         builder.Property(s => s.Status)
-            .HasColumnName("Status")
-            .HasConversion<string>()
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasConversion(
+                v => v.ToString().ToUpper(),
+                v => Enum.Parse<SaleStatus>(v, true))
+            .HasMaxLength(20);
 
-        builder.Property(s => s.PaymentReference)
-            .HasColumnName("PaymentReference")
-            .HasMaxLength(100);
+        // C#: PaymentReference -> SQL no existe, ignorar
+        builder.Ignore(s => s.PaymentReference);
 
         builder.Property(s => s.Notes)
-            .HasColumnName("Notes");
+            .HasColumnType("text");
 
-        // Campos de auditoría
-        builder.Property(s => s.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        // C#: UserId -> SQL: created_by (el usuario que creo la venta)
+        builder.Property(s => s.UserId)
+            .HasColumnName("created_by");
 
-        builder.Property(s => s.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
+        // C#: PaymentMethodId -> SQL no tiene directamente
+        // Las ventas pueden tener multiples pagos via tabla Payments
+        // Ignoramos esta propiedad o la mapeamos a una columna auxiliar
+        builder.Ignore(s => s.PaymentMethodId);
 
-        builder.Property(s => s.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(s => s.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(s => s.TicketNumber)
-            .IsUnique()
-            .HasDatabaseName("IX_Sales_TicketNumber");
-
-        builder.HasIndex(s => s.BranchId)
-            .HasDatabaseName("IX_Sales_BranchId");
-
-        builder.HasIndex(s => s.SaleDate)
-            .HasDatabaseName("IX_Sales_SaleDate");
+        // Indices
+        builder.HasIndex(s => s.TicketNumber).IsUnique();
+        builder.HasIndex(s => s.BranchId);
+        builder.HasIndex(s => s.MemberId);
+        builder.HasIndex(s => s.SaleDate);
+        builder.HasIndex(s => s.Status);
 
         // Relaciones
         builder.HasOne(s => s.Branch)
@@ -115,16 +75,26 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
         builder.HasOne(s => s.Member)
             .WithMany(m => m.Sales)
             .HasForeignKey(s => s.MemberId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasOne(s => s.User)
             .WithMany(u => u.Sales)
             .HasForeignKey(s => s.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(s => s.PaymentMethod)
-            .WithMany(pm => pm.Sales)
-            .HasForeignKey(s => s.PaymentMethodId)
-            .OnDelete(DeleteBehavior.Restrict);
+        // Ignoramos PaymentMethod porque no hay FK directa en SQL
+        builder.Ignore(s => s.PaymentMethod);
+
+        // Ignorar propiedades de auditoria
+        builder.Ignore(s => s.DeletedBy);
+        builder.Ignore(s => s.IsDeleted);
+        builder.Ignore(s => s.DeletedAt);
+        builder.Ignore(s => s.UpdatedAt);
+        builder.Ignore(s => s.UpdatedBy);
+        builder.Ignore(s => s.CreatedBy); // Ya mapeado a UserId
+        builder.Ignore(s => s.CreatedAt); // SaleDate es la fecha
+
+        // Filtro soft delete
+        builder.HasQueryFilter(s => s.DeletedAt == null);
     }
 }

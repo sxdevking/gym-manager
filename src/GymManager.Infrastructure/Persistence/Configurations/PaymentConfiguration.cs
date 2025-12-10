@@ -5,96 +5,59 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad Payment
-/// </summary>
+// ============================================================
+// PAYMENTS (12_payments.sql)
+// ============================================================
 public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 {
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Payments", "gym");
+        builder.ToTable("payments");
 
-        // Clave primaria
         builder.HasKey(p => p.PaymentId);
 
-        // Propiedades
-        builder.Property(p => p.PaymentId)
-            .HasColumnName("PaymentId")
-            .IsRequired();
-
-        builder.Property(p => p.MembershipId)
-            .HasColumnName("MembershipId")
-            .IsRequired();
-
-        builder.Property(p => p.MemberId)
-            .HasColumnName("MemberId")
-            .IsRequired();
-
-        builder.Property(p => p.PaymentMethodId)
-            .HasColumnName("PaymentMethodId")
-            .IsRequired();
-
-        builder.Property(p => p.ProcessedByUserId)
-            .HasColumnName("ProcessedByUserId");
-
         builder.Property(p => p.Amount)
-            .HasColumnName("Amount")
             .HasPrecision(10, 2)
             .IsRequired();
 
         builder.Property(p => p.PaymentDate)
-            .HasColumnName("PaymentDate")
             .IsRequired();
 
+        // Enum Status
         builder.Property(p => p.Status)
-            .HasColumnName("Status")
-            .HasConversion<string>()
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasConversion(
+                v => v.ToString().ToUpper(),
+                v => Enum.Parse<PaymentStatus>(v, true))
+            .HasMaxLength(20);
 
+        // C#: Reference -> SQL: reference_number
         builder.Property(p => p.Reference)
-            .HasColumnName("Reference")
+            .HasColumnName("reference_number")
             .HasMaxLength(100);
 
         builder.Property(p => p.Notes)
-            .HasColumnName("Notes");
+            .HasColumnType("text");
 
-        // Campos de auditoría
-        builder.Property(p => p.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        // C#: ProcessedByUserId -> SQL: created_by (mapeo aproximado)
+        builder.Property(p => p.ProcessedByUserId)
+            .HasColumnName("created_by");
 
-        builder.Property(p => p.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(p => p.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(p => p.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(p => p.MembershipId)
-            .HasDatabaseName("IX_Payments_MembershipId");
-
-        builder.HasIndex(p => p.MemberId)
-            .HasDatabaseName("IX_Payments_MemberId");
-
-        builder.HasIndex(p => p.PaymentDate)
-            .HasDatabaseName("IX_Payments_PaymentDate");
+        // Indices
+        builder.HasIndex(p => p.MembershipId);
+        builder.HasIndex(p => p.MemberId);
+        builder.HasIndex(p => p.PaymentDate);
+        builder.HasIndex(p => p.Status);
 
         // Relaciones
         builder.HasOne(p => p.Membership)
             .WithMany(m => m.Payments)
             .HasForeignKey(p => p.MembershipId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasOne(p => p.Member)
             .WithMany(m => m.Payments)
             .HasForeignKey(p => p.MemberId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasOne(p => p.PaymentMethod)
             .WithMany(pm => pm.Payments)
@@ -104,6 +67,18 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.HasOne(p => p.ProcessedByUser)
             .WithMany(u => u.Payments)
             .HasForeignKey(p => p.ProcessedByUserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // Ignorar propiedades de auditoria
+        builder.Ignore(p => p.DeletedBy);
+        builder.Ignore(p => p.IsDeleted);
+        builder.Ignore(p => p.DeletedAt);
+        builder.Ignore(p => p.UpdatedAt);
+        builder.Ignore(p => p.UpdatedBy);
+        builder.Ignore(p => p.CreatedBy); // Ya mapeado a ProcessedByUserId
+        builder.Ignore(p => p.CreatedAt); // payment_date es la fecha
+
+        // Filtro soft delete
+        builder.HasQueryFilter(p => p.DeletedAt == null);
     }
 }

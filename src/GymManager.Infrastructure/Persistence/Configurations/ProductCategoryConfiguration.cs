@@ -4,55 +4,39 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad ProductCategory
-/// </summary>
+// ============================================================
+// PRODUCT CATEGORIES (13_product_categories.sql)
+// ============================================================
 public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategory>
 {
     public void Configure(EntityTypeBuilder<ProductCategory> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("ProductCategories", "gym");
+        builder.ToTable("productcategories");
 
-        // Clave primaria
         builder.HasKey(pc => pc.CategoryId);
 
-        // Propiedades
-        builder.Property(pc => pc.CategoryId)
-            .HasColumnName("CategoryId")
-            .IsRequired();
-
+        // C#: Name -> SQL: category_name
         builder.Property(pc => pc.Name)
-            .HasColumnName("Name")
-            .HasMaxLength(50)
-            .IsRequired();
+            .HasColumnName("category_name")
+            .IsRequired()
+            .HasMaxLength(50);
 
         builder.Property(pc => pc.Description)
-            .HasColumnName("Description")
             .HasMaxLength(255);
 
+        // C#: DisplayOrder -> SQL: sort_order
         builder.Property(pc => pc.DisplayOrder)
-            .HasColumnName("DisplayOrder")
-            .HasDefaultValue(0);
+            .HasColumnName("sort_order");
 
-        // Campos de auditoría
-        builder.Property(pc => pc.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        // Indices
+        builder.HasIndex(pc => pc.Name).IsUnique();
 
-        builder.Property(pc => pc.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(pc => pc.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(pc => pc.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(pc => pc.Name)
-            .IsUnique()
-            .HasDatabaseName("IX_ProductCategories_Name");
+        // Ignorar propiedades de auditoria
+        builder.Ignore(pc => pc.DeletedBy);
+        builder.Ignore(pc => pc.IsDeleted);
+        builder.Ignore(pc => pc.DeletedAt);
+        builder.Ignore(pc => pc.UpdatedAt);
+        builder.Ignore(pc => pc.UpdatedBy);
+        builder.Ignore(pc => pc.CreatedBy);
     }
 }

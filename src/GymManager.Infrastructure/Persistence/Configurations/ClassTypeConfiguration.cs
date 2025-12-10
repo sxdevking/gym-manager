@@ -4,68 +4,52 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad ClassType
-/// </summary>
+// ============================================================
+// CLASS TYPES (18_class_types.sql)
+// ============================================================
 public class ClassTypeConfiguration : IEntityTypeConfiguration<ClassType>
 {
     public void Configure(EntityTypeBuilder<ClassType> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("ClassTypes", "gym");
+        builder.ToTable("classtypes");
 
-        // Clave primaria
         builder.HasKey(ct => ct.ClassTypeId);
 
-        // Propiedades
-        builder.Property(ct => ct.ClassTypeId)
-            .HasColumnName("ClassTypeId")
-            .IsRequired();
-
+        // C#: Name -> SQL: type_name
         builder.Property(ct => ct.Name)
-            .HasColumnName("Name")
-            .HasMaxLength(50)
-            .IsRequired();
+            .HasColumnName("type_name")
+            .IsRequired()
+            .HasMaxLength(50);
 
         builder.Property(ct => ct.Description)
-            .HasColumnName("Description")
-            .HasMaxLength(500);
+            .HasColumnType("text");
 
+        // C#: DurationMinutes -> SQL: default_duration_minutes
         builder.Property(ct => ct.DurationMinutes)
-            .HasColumnName("DurationMinutes")
-            .HasDefaultValue(60);
+            .HasColumnName("default_duration_minutes");
 
+        // C#: MaxCapacity -> SQL: default_capacity
         builder.Property(ct => ct.MaxCapacity)
-            .HasColumnName("MaxCapacity")
-            .HasDefaultValue(20);
+            .HasColumnName("default_capacity");
 
+        // C#: Color -> SQL: color_code
         builder.Property(ct => ct.Color)
-            .HasColumnName("Color")
-            .HasMaxLength(7)
-            .HasDefaultValue("#3B82F6");
+            .HasColumnName("color_code")
+            .HasMaxLength(7);
 
+        // C#: IsAvailable -> SQL: is_active
         builder.Property(ct => ct.IsAvailable)
-            .HasColumnName("IsAvailable")
-            .HasDefaultValue(true);
+            .HasColumnName("is_active");
 
-        // Campos de auditoría
-        builder.Property(ct => ct.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        // Indices
+        builder.HasIndex(ct => ct.Name).IsUnique();
 
-        builder.Property(ct => ct.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(ct => ct.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(ct => ct.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(ct => ct.Name)
-            .IsUnique()
-            .HasDatabaseName("IX_ClassTypes_Name");
+        // Ignorar propiedades de auditoria
+        builder.Ignore(ct => ct.DeletedBy);
+        builder.Ignore(ct => ct.IsDeleted);
+        builder.Ignore(ct => ct.DeletedAt);
+        builder.Ignore(ct => ct.UpdatedAt);
+        builder.Ignore(ct => ct.UpdatedBy);
+        builder.Ignore(ct => ct.CreatedBy);
     }
 }

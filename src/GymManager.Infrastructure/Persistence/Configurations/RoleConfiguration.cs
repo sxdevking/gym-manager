@@ -4,51 +4,35 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad Role
-/// </summary>
+// ============================================================
+// ROLES (04_roles.sql)
+// ============================================================
 public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Roles", "gym");
+        builder.ToTable("roles");
 
-        // Clave primaria
         builder.HasKey(r => r.RoleId);
 
-        // Propiedades
-        builder.Property(r => r.RoleId)
-            .HasColumnName("RoleId")
-            .IsRequired();
-
+        // C#: Name -> SQL: role_name
         builder.Property(r => r.Name)
-            .HasColumnName("Name")
-            .HasMaxLength(50)
-            .IsRequired();
+            .HasColumnName("role_name")
+            .IsRequired()
+            .HasMaxLength(50);
 
         builder.Property(r => r.Description)
-            .HasColumnName("Description")
             .HasMaxLength(255);
 
-        // Campos de auditoría
-        builder.Property(r => r.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        // Indices
+        builder.HasIndex(r => r.Name).IsUnique();
 
-        builder.Property(r => r.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(r => r.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(r => r.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(r => r.Name)
-            .IsUnique()
-            .HasDatabaseName("IX_Roles_Name");
+        // Ignorar propiedades de auditoria que no existen
+        builder.Ignore(r => r.DeletedBy);
+        builder.Ignore(r => r.IsDeleted);
+        builder.Ignore(r => r.DeletedAt);
+        builder.Ignore(r => r.UpdatedAt);
+        builder.Ignore(r => r.UpdatedBy);
+        builder.Ignore(r => r.CreatedBy);
     }
 }

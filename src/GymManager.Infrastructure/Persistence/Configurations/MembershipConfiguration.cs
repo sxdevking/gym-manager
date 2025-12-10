@@ -5,89 +5,49 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad Membership
-/// </summary>
+// ============================================================
+// MEMBERSHIPS (09_memberships.sql)
+// ============================================================
 public class MembershipConfiguration : IEntityTypeConfiguration<Membership>
 {
     public void Configure(EntityTypeBuilder<Membership> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Memberships", "gym");
+        builder.ToTable("memberships");
 
-        // Clave primaria
         builder.HasKey(m => m.MembershipId);
 
-        // Propiedades
-        builder.Property(m => m.MembershipId)
-            .HasColumnName("MembershipId")
-            .IsRequired();
-
-        builder.Property(m => m.MemberId)
-            .HasColumnName("MemberId")
-            .IsRequired();
-
-        builder.Property(m => m.PlanId)
-            .HasColumnName("PlanId")
-            .IsRequired();
-
         builder.Property(m => m.StartDate)
-            .HasColumnName("StartDate")
             .IsRequired();
 
         builder.Property(m => m.EndDate)
-            .HasColumnName("EndDate")
             .IsRequired();
 
+        // Enum Status
         builder.Property(m => m.Status)
-            .HasColumnName("Status")
-            .HasConversion<string>()
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasConversion(
+                v => v.ToString().ToUpper(),
+                v => Enum.Parse<MembershipStatus>(v, true))
+            .HasMaxLength(20);
 
         builder.Property(m => m.PricePaid)
-            .HasColumnName("PricePaid")
-            .HasPrecision(10, 2)
-            .IsRequired();
+            .HasPrecision(10, 2);
 
+        // C#: FreezeDaysUsed -> SQL: frozen_days_used
         builder.Property(m => m.FreezeDaysUsed)
-            .HasColumnName("FreezeDaysUsed")
-            .HasDefaultValue(0);
+            .HasColumnName("frozen_days_used");
 
+        // C#: FreezeStartDate -> SQL: frozen_at
         builder.Property(m => m.FreezeStartDate)
-            .HasColumnName("FreezeStartDate");
+            .HasColumnName("frozen_at");
 
         builder.Property(m => m.Notes)
-            .HasColumnName("Notes");
+            .HasColumnType("text");
 
-        // Ignorar propiedades calculadas
-        builder.Ignore(m => m.IsCurrentlyActive);
-        builder.Ignore(m => m.DaysRemaining);
-
-        // Campos de auditoría
-        builder.Property(m => m.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
-
-        builder.Property(m => m.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(m => m.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(m => m.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(m => m.MemberId)
-            .HasDatabaseName("IX_Memberships_MemberId");
-
-        builder.HasIndex(m => m.PlanId)
-            .HasDatabaseName("IX_Memberships_PlanId");
-
-        builder.HasIndex(m => m.Status)
-            .HasDatabaseName("IX_Memberships_Status");
+        // Indices
+        builder.HasIndex(m => m.MemberId);
+        builder.HasIndex(m => m.PlanId);
+        builder.HasIndex(m => m.Status);
+        builder.HasIndex(m => new { m.StartDate, m.EndDate });
 
         // Relaciones
         builder.HasOne(m => m.Member)
@@ -99,5 +59,16 @@ public class MembershipConfiguration : IEntityTypeConfiguration<Membership>
             .WithMany(mp => mp.Memberships)
             .HasForeignKey(m => m.PlanId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Ignorar propiedades de auditoria que no existen
+        builder.Ignore(m => m.DeletedBy);
+        builder.Ignore(m => m.IsDeleted);
+
+        // Ignorar propiedades calculadas
+        builder.Ignore(m => m.IsCurrentlyActive);
+        builder.Ignore(m => m.DaysRemaining);
+
+        // Filtro soft delete
+        builder.HasQueryFilter(m => m.DeletedAt == null);
     }
 }

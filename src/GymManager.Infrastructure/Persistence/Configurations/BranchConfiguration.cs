@@ -3,77 +3,59 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
-
 /// <summary>
-/// Configuración de Entity Framework para la entidad Branch
+/// Configuracion EF Core para la entidad Branch
 /// </summary>
 public class BranchConfiguration : IEntityTypeConfiguration<Branch>
 {
     public void Configure(EntityTypeBuilder<Branch> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Branches", "gym");
+        builder.ToTable("branches");
 
-        // Clave primaria
         builder.HasKey(b => b.BranchId);
 
-        // Propiedades
-        builder.Property(b => b.BranchId)
-            .HasColumnName("BranchId")
-            .IsRequired();
-
+        // Propiedades con nombres DIFERENTES en SQL
         builder.Property(b => b.Code)
-            .HasColumnName("Code")
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasColumnName("branch_code")
+            .IsRequired()
+            .HasMaxLength(10);
 
         builder.Property(b => b.Name)
-            .HasColumnName("Name")
-            .HasMaxLength(100)
-            .IsRequired();
+            .HasColumnName("branch_name")
+            .IsRequired()
+            .HasMaxLength(100);
 
         builder.Property(b => b.Address)
-            .HasColumnName("Address")
             .HasMaxLength(255);
 
         builder.Property(b => b.Phone)
-            .HasColumnName("Phone")
             .HasMaxLength(20);
 
         builder.Property(b => b.Email)
-            .HasColumnName("Email")
             .HasMaxLength(100);
 
+        // TimeOnly se mapea a TIME en PostgreSQL
+        // Nombres diferentes en SQL
         builder.Property(b => b.OpenTime)
-            .HasColumnName("OpenTime");
+            .HasColumnName("opening_time");
 
         builder.Property(b => b.CloseTime)
-            .HasColumnName("CloseTime");
+            .HasColumnName("closing_time");
 
-        // Campos de auditoría
-        builder.Property(b => b.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
+        // Indices
+        builder.HasIndex(b => b.Code).IsUnique();
 
-        builder.Property(b => b.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(b => b.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(b => b.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(b => b.Code)
-            .IsUnique()
-            .HasDatabaseName("IX_Branches_Code");
-
-        // Relación 1:1 con BranchSettings
+        // Relacion 1:1 con BranchSettings
         builder.HasOne(b => b.Settings)
             .WithOne(bs => bs.Branch)
             .HasForeignKey<BranchSettings>(bs => bs.BranchId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Ignorar propiedades calculadas y de auditoria que no existen
+        builder.Ignore(b => b.DeletedBy);
+        builder.Ignore(b => b.IsDeleted);
+
+        // Filtro soft delete
+        builder.HasQueryFilter(b => b.DeletedAt == null);
     }
 }

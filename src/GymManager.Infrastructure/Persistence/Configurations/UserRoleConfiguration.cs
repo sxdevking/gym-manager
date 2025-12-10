@@ -4,55 +4,19 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad UserRole (tabla intermedia)
-/// </summary>
+// ============================================================
+// USER ROLES (06_user_roles.sql)
+// ============================================================
 public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
 {
     public void Configure(EntityTypeBuilder<UserRole> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("UserRoles", "gym");
+        builder.ToTable("userroles");
 
-        // Clave primaria
         builder.HasKey(ur => ur.UserRoleId);
 
-        // Propiedades
-        builder.Property(ur => ur.UserRoleId)
-            .HasColumnName("UserRoleId")
-            .IsRequired();
-
-        builder.Property(ur => ur.UserId)
-            .HasColumnName("UserId")
-            .IsRequired();
-
-        builder.Property(ur => ur.RoleId)
-            .HasColumnName("RoleId")
-            .IsRequired();
-
         builder.Property(ur => ur.AssignedAt)
-            .HasColumnName("AssignedAt")
-            .IsRequired();
-
-        // Campos de auditoría
-        builder.Property(ur => ur.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
-
-        builder.Property(ur => ur.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(ur => ur.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(ur => ur.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(ur => new { ur.UserId, ur.RoleId })
-            .IsUnique()
-            .HasDatabaseName("IX_UserRoles_UserId_RoleId");
+            .HasColumnName("assigned_at");
 
         // Relaciones
         builder.HasOne(ur => ur.User)
@@ -63,6 +27,18 @@ public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
         builder.HasOne(ur => ur.Role)
             .WithMany(r => r.UserRoles)
             .HasForeignKey(ur => ur.RoleId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Indice unico
+        builder.HasIndex(ur => new { ur.UserId, ur.RoleId }).IsUnique();
+
+        // Ignorar propiedades de auditoria que no existen
+        builder.Ignore(ur => ur.DeletedBy);
+        builder.Ignore(ur => ur.IsDeleted);
+        builder.Ignore(ur => ur.DeletedAt);
+        builder.Ignore(ur => ur.UpdatedAt);
+        builder.Ignore(ur => ur.UpdatedBy);
+        builder.Ignore(ur => ur.CreatedBy);
+        builder.Ignore(ur => ur.CreatedAt);
     }
 }

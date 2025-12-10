@@ -4,101 +4,82 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManager.Infrastructure.Persistence.Configurations;
 
-/// <summary>
-/// Configuración de Entity Framework para la entidad Product
-/// </summary>
+// ============================================================
+// PRODUCTS (14_products.sql)
+// ============================================================
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        // Tabla y Schema
-        builder.ToTable("Products", "gym");
+        builder.ToTable("products");
 
-        // Clave primaria
         builder.HasKey(p => p.ProductId);
 
-        // Propiedades
-        builder.Property(p => p.ProductId)
-            .HasColumnName("ProductId")
-            .IsRequired();
-
-        builder.Property(p => p.CategoryId)
-            .HasColumnName("CategoryId")
-            .IsRequired();
-
+        // C#: Sku -> SQL: product_code
         builder.Property(p => p.Sku)
-            .HasColumnName("Sku")
-            .HasMaxLength(50)
-            .IsRequired();
+            .HasColumnName("product_code")
+            .IsRequired()
+            .HasMaxLength(50);
 
+        // C#: Name -> SQL: product_name
         builder.Property(p => p.Name)
-            .HasColumnName("Name")
-            .HasMaxLength(100)
-            .IsRequired();
+            .HasColumnName("product_name")
+            .IsRequired()
+            .HasMaxLength(100);
 
         builder.Property(p => p.Description)
-            .HasColumnName("Description")
-            .HasMaxLength(500);
+            .HasColumnType("text");
 
+        // C#: Price -> SQL: unit_price
         builder.Property(p => p.Price)
-            .HasColumnName("Price")
-            .HasPrecision(10, 2)
-            .IsRequired();
+            .HasColumnName("unit_price")
+            .HasPrecision(10, 2);
 
+        // C#: Cost -> SQL: cost_price
         builder.Property(p => p.Cost)
-            .HasColumnName("Cost")
+            .HasColumnName("cost_price")
             .HasPrecision(10, 2);
 
         builder.Property(p => p.IsRentable)
-            .HasColumnName("IsRentable")
-            .HasDefaultValue(false);
+            .HasColumnName("is_rentable");
 
+        // C#: RentalPrice -> SQL: rental_price_per_day
         builder.Property(p => p.RentalPrice)
-            .HasColumnName("RentalPrice")
+            .HasColumnName("rental_price_per_day")
             .HasPrecision(10, 2);
 
         builder.Property(p => p.RentalDeposit)
-            .HasColumnName("RentalDeposit")
+            .HasColumnName("rental_deposit")
             .HasPrecision(10, 2);
 
+        // C#: MinStock -> SQL: min_stock_alert
         builder.Property(p => p.MinStock)
-            .HasColumnName("MinStock")
-            .HasDefaultValue(5);
+            .HasColumnName("min_stock_alert");
 
+        // C#: ImageBase64 -> SQL: image_path
         builder.Property(p => p.ImageBase64)
-            .HasColumnName("ImageBase64");
+            .HasColumnName("image_path")
+            .HasMaxLength(500);
 
+        // C#: IsAvailable -> SQL: is_active
         builder.Property(p => p.IsAvailable)
-            .HasColumnName("IsAvailable")
-            .HasDefaultValue(true);
+            .HasColumnName("is_active");
 
-        // Campos de auditoría
-        builder.Property(p => p.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true);
-
-        builder.Property(p => p.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(p => p.UpdatedAt)
-            .HasColumnName("UpdatedAt");
-
-        builder.Property(p => p.DeletedAt)
-            .HasColumnName("DeletedAt");
-
-        // Índices
-        builder.HasIndex(p => p.Sku)
-            .IsUnique()
-            .HasDatabaseName("IX_Products_Sku");
-
-        builder.HasIndex(p => p.CategoryId)
-            .HasDatabaseName("IX_Products_CategoryId");
+        // Indices
+        builder.HasIndex(p => p.Sku).IsUnique();
+        builder.HasIndex(p => p.CategoryId);
 
         // Relaciones
         builder.HasOne(p => p.Category)
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Ignorar propiedades de auditoria
+        builder.Ignore(p => p.DeletedBy);
+        builder.Ignore(p => p.IsDeleted);
+
+        // Filtro soft delete
+        builder.HasQueryFilter(p => p.DeletedAt == null);
     }
 }
