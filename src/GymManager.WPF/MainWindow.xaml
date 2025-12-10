@@ -151,7 +151,7 @@
                         <Button Style="{StaticResource MenuButtonStyle}"
                                 Command="{Binding NavigateToClassesCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[C]" Width="24" FontWeight="Bold" Foreground="#06B6D4"/>
+                                <TextBlock Text="[C]" Width="24" FontWeight="Bold" Foreground="#14B8A6"/>
                                 <TextBlock Text="Clases" Margin="12,0,0,0"/>
                             </StackPanel>
                         </Button>
@@ -172,11 +172,11 @@
                             </StackPanel>
                         </Button>
 
-                        <!-- Configuración -->
+                        <!-- Configuracion -->
                         <Button Style="{StaticResource MenuButtonStyle}"
                                 Command="{Binding NavigateToSettingsCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[S]" Width="24" FontWeight="Bold" Foreground="#6B7280"/>
+                                <TextBlock Text="[S]" Width="24" FontWeight="Bold" Foreground="#64748B"/>
                                 <TextBlock Text="Configuracion" Margin="12,0,0,0"/>
                             </StackPanel>
                         </Button>
@@ -184,19 +184,17 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <!-- Usuario Actual -->
-                <Border Grid.Row="2" 
-                        Background="#0F172A" 
-                        CornerRadius="8" 
-                        Margin="12" 
-                        Padding="12">
+                <!-- Usuario y Version -->
+                <Border Grid.Row="2" Background="#0F172A" Padding="16" Margin="8">
                     <StackPanel>
                         <TextBlock Text="{Binding UserName}" 
                                    Foreground="#F8FAFC" 
-                                   FontWeight="SemiBold"/>
+                                   FontWeight="SemiBold"
+                                   FontSize="13"/>
                         <TextBlock Text="Administrador" 
                                    Foreground="#64748B" 
-                                   FontSize="12"/>
+                                   FontSize="11"
+                                   Margin="0,2,0,0"/>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -207,7 +205,9 @@
         <!-- ═══════════════════════════════════════════════════════════ -->
         <Grid Grid.Column="1" Margin="24">
 
+            <!-- ═══════════════════════════════════════════════════════════ -->
             <!-- DASHBOARD -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
             <Grid Visibility="{Binding ShowDashboard, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -345,9 +345,17 @@
                 </Border>
             </Grid>
 
-            <!-- MIEMBROS -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- LISTA DE MIEMBROS -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
             <views:MembersView x:Name="MembersViewControl"
                                Visibility="{Binding ShowMembers, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- FORMULARIO DE MIEMBRO (NUEVO) -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <views:MemberFormView x:Name="MemberFormViewControl"
+                                  Visibility="{Binding ShowMemberForm, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
         </Grid>
     </Grid>
