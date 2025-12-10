@@ -4,6 +4,7 @@ using GymManager.Infrastructure;
 using GymManager.Infrastructure.Persistence;
 using GymManager.WPF.ViewModels;
 using GymManager.WPF.ViewModels.Licensing;
+using GymManager.WPF.ViewModels.Members;
 using GymManager.WPF.Views.Licensing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,19 +29,21 @@ public partial class App : System.Windows.Application
             })
             .ConfigureServices((context, services) =>
             {
-                // Registrar Infrastructure (incluye BD, repositorios y licenciamiento)
+                // Registrar Infrastructure
                 services.AddInfrastructure(context.Configuration);
 
                 // ═══════════════════════════════════════════════════════════
                 // Registrar ViewModels
                 // ═══════════════════════════════════════════════════════════
-                services.AddTransient<MainViewModel>();
+                services.AddSingleton<MainViewModel>();
                 services.AddTransient<LicenseActivationViewModel>();
+                services.AddTransient<MembersViewModel>();
+                services.AddTransient<MemberFormViewModel>();
 
                 // ═══════════════════════════════════════════════════════════
                 // Registrar Views
                 // ═══════════════════════════════════════════════════════════
-                services.AddTransient<MainWindow>();
+                services.AddSingleton<MainWindow>();
                 services.AddTransient<LicenseActivationView>();
             })
             .Build();
@@ -66,9 +69,6 @@ public partial class App : System.Windows.Application
                 Shutdown();
                 return;
             }
-
-            // TODO: Validar licencia aquí cuando esté listo el dongle
-            // Por ahora, ir directo a MainWindow
 
             // Mostrar ventana principal
             var mainWindow = _host.Services.GetRequiredService<MainWindow>();

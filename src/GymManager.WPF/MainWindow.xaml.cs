@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using GymManager.WPF.ViewModels;
+using GymManager.WPF.ViewModels.Members;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GymManager.WPF;
 
@@ -9,12 +11,27 @@ namespace GymManager.WPF;
 public partial class MainWindow : Window
 {
     private readonly MainViewModel _viewModel;
+    private readonly IServiceProvider _serviceProvider;
 
-    public MainWindow(MainViewModel viewModel)
+    public MainWindow(MainViewModel viewModel, IServiceProvider serviceProvider)
     {
         InitializeComponent();
         _viewModel = viewModel;
+        _serviceProvider = serviceProvider;
         DataContext = _viewModel;
+
+        // Configurar el DataContext de MembersView
+        var membersViewModel = _serviceProvider.GetRequiredService<MembersViewModel>();
+        MembersViewControl.DataContext = membersViewModel;
+
+        // Cargar miembros cuando se muestre la vista
+        _viewModel.PropertyChanged += async (s, e) =>
+        {
+            if (e.PropertyName == nameof(MainViewModel.ShowMembers) && _viewModel.ShowMembers)
+            {
+                await membersViewModel.LoadMembersAsync();
+            }
+        };
 
         // Cargar dashboard al iniciar
         Loaded += MainWindow_Loaded;
@@ -22,7 +39,6 @@ public partial class MainWindow : Window
 
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        // Cargar estadísticas del dashboard automáticamente
         await _viewModel.LoadDashboardAsync();
     }
 }

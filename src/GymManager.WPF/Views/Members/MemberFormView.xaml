@@ -1,0 +1,270 @@
+<UserControl x:Class="GymManager.WPF.Views.Members.MemberFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="500"
+             Background="#0F172A">
+
+    <UserControl.Resources>
+        <!-- Estilo para Labels -->
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+
+        <!-- Estilo para TextBox -->
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#1E293B"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para ComboBox -->
+        <Style x:Key="ComboStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="#1E293B"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <!-- Estilo para DatePicker -->
+        <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+            <Setter Property="Background" Value="#1E293B"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <!-- Estilo para botones -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ??????????????????????????????????????????????????????????? -->
+        <!-- HEADER -->
+        <!-- ??????????????????????????????????????????????????????????? -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock Text="{Binding Title}" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="#F8FAFC"/>
+            <TextBlock Text="Complete la informacion del miembro" 
+                       FontSize="14" 
+                       Foreground="#64748B"
+                       Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- ??????????????????????????????????????????????????????????? -->
+        <!-- FORMULARIO -->
+        <!-- ??????????????????????????????????????????????????????????? -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- Mensaje de Error -->
+                <Border Background="#7F1D1D" 
+                        CornerRadius="6" 
+                        Padding="12" 
+                        Margin="0,0,0,16"
+                        Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}">
+                    <TextBlock Text="{Binding ErrorMessage}" 
+                               Foreground="#FCA5A5" 
+                               TextWrapping="Wrap"/>
+                </Border>
+
+                <!-- Codigo de Miembro (Solo lectura) -->
+                <TextBlock Text="Codigo de Miembro" Style="{StaticResource LabelStyle}"/>
+                <TextBox Text="{Binding MemberCode}" 
+                         Style="{StaticResource InputStyle}"
+                         IsReadOnly="True"
+                         Opacity="0.7"/>
+
+                <!-- Nombre y Apellido en una fila -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Nombre *" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Apellido *" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Email -->
+                <TextBlock Text="Email" Style="{StaticResource LabelStyle}"/>
+                <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" 
+                         Style="{StaticResource InputStyle}"/>
+
+                <!-- Teléfono y Género en una fila -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Telefono" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Genero" Style="{StaticResource LabelStyle}"/>
+                        <ComboBox ItemsSource="{Binding Genders}"
+                                  SelectedItem="{Binding SelectedGender}"
+                                  Style="{StaticResource ComboStyle}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Fecha de Nacimiento -->
+                <TextBlock Text="Fecha de Nacimiento" Style="{StaticResource LabelStyle}"/>
+                <DatePicker SelectedDate="{Binding BirthDate}" 
+                            Style="{StaticResource DatePickerStyle}"/>
+
+                <!-- Dirección -->
+                <TextBlock Text="Direccion" Style="{StaticResource LabelStyle}"/>
+                <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" 
+                         Style="{StaticResource InputStyle}"/>
+
+                <!-- Contacto de Emergencia -->
+                <TextBlock Text="CONTACTO DE EMERGENCIA" 
+                           FontSize="12" 
+                           FontWeight="SemiBold"
+                           Foreground="#64748B"
+                           Margin="0,8,0,12"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Nombre Contacto" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding EmergencyContact, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Telefono Emergencia" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Text="{Binding EmergencyPhone, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Notas -->
+                <TextBlock Text="Notas" Style="{StaticResource LabelStyle}"/>
+                <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" 
+                         Style="{StaticResource InputStyle}"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Height="80"
+                         VerticalContentAlignment="Top"/>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ??????????????????????????????????????????????????????????? -->
+        <!-- BOTONES -->
+        <!-- ??????????????????????????????????????????????????????????? -->
+        <Grid Grid.Row="2" Margin="0,24,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1"
+                    Content="Cancelar"
+                    Command="{Binding CancelCommand}"
+                    Background="#475569"
+                    Foreground="White"
+                    Style="{StaticResource ButtonStyle}"
+                    Margin="0,0,12,0"/>
+
+            <Button Grid.Column="2"
+                    Content="Guardar"
+                    Command="{Binding SaveCommand}"
+                    Background="#10B981"
+                    Foreground="White"
+                    Style="{StaticResource ButtonStyle}"/>
+        </Grid>
+
+        <!-- Loading Overlay -->
+        <Border Grid.Row="0" Grid.RowSpan="3"
+                Background="#80000000"
+                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Guardando..." 
+                           Foreground="White" 
+                           FontSize="16"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

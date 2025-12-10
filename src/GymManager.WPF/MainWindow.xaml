@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:GymManager.WPF.Views.Members"
         mc:Ignorable="d"
         Title="{Binding Title}"
         Height="720" Width="1280"
@@ -41,12 +42,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-
-        <!-- Estilo para botones activos del menu -->
-        <Style x:Key="MenuButtonActiveStyle" TargetType="Button" BasedOn="{StaticResource MenuButtonStyle}">
-            <Setter Property="Background" Value="#3B82F6"/>
-            <Setter Property="Foreground" Value="#FFFFFF"/>
         </Style>
 
         <!-- Estilo para tarjetas de estadisticas -->
@@ -211,203 +206,149 @@
         <!-- AREA DE CONTENIDO PRINCIPAL -->
         <!-- ═══════════════════════════════════════════════════════════ -->
         <Grid Grid.Column="1" Margin="24">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
 
-            <!-- Header -->
-            <StackPanel Grid.Row="0" Margin="0,0,0,24">
-                <TextBlock Text="Dashboard" 
-                           FontSize="28" 
-                           FontWeight="Bold" 
-                           Foreground="#F8FAFC"/>
-                <TextBlock Text="Resumen general del gimnasio" 
-                           FontSize="14" 
-                           Foreground="#64748B"
-                           Margin="0,4,0,0"/>
-            </StackPanel>
+            <!-- DASHBOARD -->
+            <Grid Visibility="{Binding ShowDashboard, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <!-- Contenido del Dashboard -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-
-                    <!-- Fila de Estadisticas -->
-                    <TextBlock Text="Estadisticas de Hoy" 
-                               FontSize="16" 
-                               FontWeight="SemiBold" 
-                               Foreground="#94A3B8"
-                               Margin="8,0,0,12"/>
-
-                    <WrapPanel>
-                        <!-- Tarjeta: Total Miembros -->
-                        <Border Style="{StaticResource StatCardStyle}" Width="240">
-                            <StackPanel>
-                                <TextBlock Text="Total Miembros" 
-                                           Foreground="#94A3B8" 
-                                           FontSize="13"/>
-                                <TextBlock Text="{Binding TotalMembers}" 
-                                           Foreground="#F8FAFC" 
-                                           FontSize="36" 
-                                           FontWeight="Bold"
-                                           Margin="0,8,0,0"/>
-                                <TextBlock Text="registrados en el sistema" 
-                                           Foreground="#64748B" 
-                                           FontSize="12"
-                                           Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Tarjeta: Miembros Activos -->
-                        <Border Style="{StaticResource StatCardStyle}" Width="240">
-                            <StackPanel>
-                                <TextBlock Text="Miembros Activos" 
-                                           Foreground="#94A3B8" 
-                                           FontSize="13"/>
-                                <TextBlock Text="{Binding ActiveMembers}" 
-                                           Foreground="#10B981" 
-                                           FontSize="36" 
-                                           FontWeight="Bold"
-                                           Margin="0,8,0,0"/>
-                                <TextBlock Text="con membresia vigente" 
-                                           Foreground="#64748B" 
-                                           FontSize="12"
-                                           Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Tarjeta: Asistencia Hoy -->
-                        <Border Style="{StaticResource StatCardStyle}" Width="240">
-                            <StackPanel>
-                                <TextBlock Text="Asistencia Hoy" 
-                                           Foreground="#94A3B8" 
-                                           FontSize="13"/>
-                                <TextBlock Text="{Binding TodayAttendance}" 
-                                           Foreground="#3B82F6" 
-                                           FontSize="36" 
-                                           FontWeight="Bold"
-                                           Margin="0,8,0,0"/>
-                                <TextBlock Text="check-ins registrados" 
-                                           Foreground="#64748B" 
-                                           FontSize="12"
-                                           Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Tarjeta: Ingresos del Mes -->
-                        <Border Style="{StaticResource StatCardStyle}" Width="240">
-                            <StackPanel>
-                                <TextBlock Text="Ingresos del Mes" 
-                                           Foreground="#94A3B8" 
-                                           FontSize="13"/>
-                                <TextBlock Foreground="#F59E0B" 
-                                           FontSize="36" 
-                                           FontWeight="Bold"
-                                           Margin="0,8,0,0">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="${0:N0}">
-                                            <Binding Path="MonthlyRevenue"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                                <TextBlock Text="recaudados este mes" 
-                                           Foreground="#64748B" 
-                                           FontSize="12"
-                                           Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </Border>
-                    </WrapPanel>
-
-                    <!-- Segunda Fila -->
-                    <TextBlock Text="Alertas y Pendientes" 
-                               FontSize="16" 
-                               FontWeight="SemiBold" 
-                               Foreground="#94A3B8"
-                               Margin="8,24,0,12"/>
-
-                    <WrapPanel>
-                        <!-- Tarjeta: Membresias por Vencer -->
-                        <Border Style="{StaticResource StatCardStyle}" Width="240">
-                            <StackPanel>
-                                <TextBlock Text="Por Vencer (7 dias)" 
-                                           Foreground="#94A3B8" 
-                                           FontSize="13"/>
-                                <TextBlock Text="{Binding ExpiringMemberships}" 
-                                           Foreground="#EF4444" 
-                                           FontSize="36" 
-                                           FontWeight="Bold"
-                                           Margin="0,8,0,0"/>
-                                <TextBlock Text="membresias proximas a expirar" 
-                                           Foreground="#64748B" 
-                                           FontSize="12"
-                                           Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Tarjeta: Clases Hoy -->
-                        <Border Style="{StaticResource StatCardStyle}" Width="240">
-                            <StackPanel>
-                                <TextBlock Text="Clases Hoy" 
-                                           Foreground="#94A3B8" 
-                                           FontSize="13"/>
-                                <TextBlock Text="{Binding ScheduledClasses}" 
-                                           Foreground="#8B5CF6" 
-                                           FontSize="36" 
-                                           FontWeight="Bold"
-                                           Margin="0,8,0,0"/>
-                                <TextBlock Text="clases programadas" 
-                                           Foreground="#64748B" 
-                                           FontSize="12"
-                                           Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </Border>
-                    </WrapPanel>
-
-                    <!-- Boton Actualizar -->
-                    <Button Content="Actualizar Estadisticas"
-                            Command="{Binding LoadDashboardCommand}"
-                            HorizontalAlignment="Left"
-                            Margin="8,24,0,0"
-                            Padding="20,12"
-                            Background="#3B82F6"
-                            Foreground="White"
-                            BorderThickness="0"
-                            Cursor="Hand">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" 
-                                        CornerRadius="8"
-                                        Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
+                <!-- Header -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                    <TextBlock Text="Dashboard" 
+                               FontSize="28" 
+                               FontWeight="Bold" 
+                               Foreground="#F8FAFC"/>
+                    <TextBlock Text="Resumen general del gimnasio" 
+                               FontSize="14" 
+                               Foreground="#64748B"
+                               Margin="0,4,0,0"/>
                 </StackPanel>
-            </ScrollViewer>
 
-            <!-- Status Bar -->
-            <Border Grid.Row="2" 
-                    Background="#1E293B" 
-                    CornerRadius="8" 
-                    Padding="16,10"
-                    Margin="0,16,0,0">
-                <Grid>
-                    <TextBlock Text="{Binding StatusMessage}" 
-                               Foreground="#64748B" 
-                               FontSize="12"
-                               HorizontalAlignment="Left"/>
-                    <TextBlock Foreground="#64748B" 
-                               FontSize="12"
-                               HorizontalAlignment="Right">
-                        <Run Text="Version 1.0"/>
-                        <Run Text=" | "/>
-                        <Run Text="PostgreSQL Conectado"/>
-                    </TextBlock>
-                </Grid>
-            </Border>
+                <!-- Contenido del Dashboard -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+
+                        <!-- Fila de Estadisticas -->
+                        <TextBlock Text="Estadisticas de Hoy" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#94A3B8"
+                                   Margin="8,0,0,12"/>
+
+                        <WrapPanel>
+                            <!-- Tarjeta: Total Miembros -->
+                            <Border Style="{StaticResource StatCardStyle}" Width="240">
+                                <StackPanel>
+                                    <TextBlock Text="Total Miembros" Foreground="#94A3B8" FontSize="13"/>
+                                    <TextBlock Text="{Binding TotalMembers}" Foreground="#F8FAFC" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
+                                    <TextBlock Text="registrados en el sistema" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Tarjeta: Miembros Activos -->
+                            <Border Style="{StaticResource StatCardStyle}" Width="240">
+                                <StackPanel>
+                                    <TextBlock Text="Miembros Activos" Foreground="#94A3B8" FontSize="13"/>
+                                    <TextBlock Text="{Binding ActiveMembers}" Foreground="#10B981" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
+                                    <TextBlock Text="con membresia vigente" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Tarjeta: Asistencia Hoy -->
+                            <Border Style="{StaticResource StatCardStyle}" Width="240">
+                                <StackPanel>
+                                    <TextBlock Text="Asistencia Hoy" Foreground="#94A3B8" FontSize="13"/>
+                                    <TextBlock Text="{Binding TodayAttendance}" Foreground="#3B82F6" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
+                                    <TextBlock Text="check-ins registrados" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Tarjeta: Ingresos del Mes -->
+                            <Border Style="{StaticResource StatCardStyle}" Width="240">
+                                <StackPanel>
+                                    <TextBlock Text="Ingresos del Mes" Foreground="#94A3B8" FontSize="13"/>
+                                    <TextBlock Foreground="#F59E0B" FontSize="36" FontWeight="Bold" Margin="0,8,0,0">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="${0:N0}">
+                                                <Binding Path="MonthlyRevenue"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBlock Text="recaudados este mes" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </WrapPanel>
+
+                        <!-- Segunda Fila -->
+                        <TextBlock Text="Alertas y Pendientes" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#94A3B8"
+                                   Margin="8,24,0,12"/>
+
+                        <WrapPanel>
+                            <!-- Tarjeta: Membresias por Vencer -->
+                            <Border Style="{StaticResource StatCardStyle}" Width="240">
+                                <StackPanel>
+                                    <TextBlock Text="Por Vencer (7 dias)" Foreground="#94A3B8" FontSize="13"/>
+                                    <TextBlock Text="{Binding ExpiringMemberships}" Foreground="#EF4444" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
+                                    <TextBlock Text="membresias proximas a expirar" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Tarjeta: Clases Hoy -->
+                            <Border Style="{StaticResource StatCardStyle}" Width="240">
+                                <StackPanel>
+                                    <TextBlock Text="Clases Hoy" Foreground="#94A3B8" FontSize="13"/>
+                                    <TextBlock Text="{Binding ScheduledClasses}" Foreground="#8B5CF6" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
+                                    <TextBlock Text="clases programadas" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </WrapPanel>
+
+                        <!-- Boton Actualizar -->
+                        <Button Content="Actualizar Estadisticas"
+                                Command="{Binding LoadDashboardCommand}"
+                                HorizontalAlignment="Left"
+                                Margin="8,24,0,0"
+                                Padding="20,12"
+                                Background="#3B82F6"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="8"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Status Bar -->
+                <Border Grid.Row="2" Background="#1E293B" CornerRadius="8" Padding="16,10" Margin="0,16,0,0">
+                    <Grid>
+                        <TextBlock Text="{Binding StatusMessage}" Foreground="#64748B" FontSize="12" HorizontalAlignment="Left"/>
+                        <TextBlock Foreground="#64748B" FontSize="12" HorizontalAlignment="Right">
+                            <Run Text="Version 1.0"/>
+                            <Run Text=" | "/>
+                            <Run Text="PostgreSQL Conectado"/>
+                        </TextBlock>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- MIEMBROS -->
+            <views:MembersView x:Name="MembersViewControl"
+                               Visibility="{Binding ShowMembers, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
         </Grid>
     </Grid>
 </Window>

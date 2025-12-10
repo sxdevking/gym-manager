@@ -1,6 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GymManager.Application.Common.Interfaces;
+using GymManager.Domain.Enums;
 using GymManager.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,13 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     private string _branchName = "Sucursal Principal";
+
+    // ═══════════════════════════════════════════════════════════
+    // CONTENIDO DINÁMICO
+    // ═══════════════════════════════════════════════════════════
+
+    [ObservableProperty]
+    private object? _currentContent;
 
     // ═══════════════════════════════════════════════════════════
     // ESTADÍSTICAS DEL DASHBOARD
@@ -55,9 +63,32 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string _statusMessage = "Listo";
 
+    // ═══════════════════════════════════════════════════════════
+    // VISIBILIDAD DE VISTAS
+    // ═══════════════════════════════════════════════════════════
+
+    [ObservableProperty]
+    private bool _showDashboard = true;
+
+    [ObservableProperty]
+    private bool _showMembers;
+
+    [ObservableProperty]
+    private bool _showMemberForm;
+
     public MainViewModel(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+    }
+
+    /// <summary>
+    /// Oculta todas las vistas
+    /// </summary>
+    private void HideAllViews()
+    {
+        ShowDashboard = false;
+        ShowMembers = false;
+        ShowMemberForm = false;
     }
 
     /// <summary>
@@ -74,32 +105,28 @@ public partial class MainViewModel : ObservableObject
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<GymDbContext>();
 
-            // Cargar estadísticas
             TotalMembers = await context.Members.CountAsync(m => m.IsActive && m.DeletedAt == null);
 
             ActiveMembers = await context.Memberships
-                .CountAsync(m => m.Status == Domain.Enums.MembershipStatus.Active && m.IsActive);
+                .CountAsync(m => m.Status == MembershipStatus.Active && m.IsActive);
 
             TodayAttendance = await context.Attendances
                 .CountAsync(a => a.CheckInTime.Date == DateTime.UtcNow.Date);
 
-            // Membresías por vencer en los próximos 7 días
             var nextWeek = DateTime.UtcNow.AddDays(7);
             ExpiringMemberships = await context.Memberships
-                .CountAsync(m => m.Status == Domain.Enums.MembershipStatus.Active
+                .CountAsync(m => m.Status == MembershipStatus.Active
                               && m.EndDate <= nextWeek
                               && m.EndDate >= DateTime.UtcNow);
 
-            // Clases programadas para hoy
             var todayDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
             ScheduledClasses = await context.ClassSchedules
                 .CountAsync(cs => cs.DayOfWeek == todayDayOfWeek && cs.IsAvailable && cs.IsActive);
 
-            // Ingresos del mes actual
             var firstDayOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
             MonthlyRevenue = await context.Payments
                 .Where(p => p.PaymentDate >= firstDayOfMonth
-                         && p.Status == Domain.Enums.PaymentStatus.Completed)
+                         && p.Status == PaymentStatus.Completed)
                 .SumAsync(p => (decimal?)p.Amount) ?? 0;
 
             StatusMessage = $"Actualizado: {DateTime.Now:HH:mm:ss}";
@@ -119,15 +146,20 @@ public partial class MainViewModel : ObservableObject
     // ═══════════════════════════════════════════════════════════
 
     [RelayCommand]
-    private void NavigateToDashboard()
+    private async Task NavigateToDashboardAsync()
     {
+        HideAllViews();
+        ShowDashboard = true;
         CurrentView = "Dashboard";
         Title = "GymManager - Dashboard";
+        await LoadDashboardAsync();
     }
 
     [RelayCommand]
     private void NavigateToMembers()
     {
+        HideAllViews();
+        ShowMembers = true;
         CurrentView = "Members";
         Title = "GymManager - Miembros";
     }
@@ -137,6 +169,8 @@ public partial class MainViewModel : ObservableObject
     {
         CurrentView = "Memberships";
         Title = "GymManager - Membresías";
+        MessageBox.Show("Módulo de Membresías - Próximamente", "En Desarrollo",
+            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
@@ -144,6 +178,8 @@ public partial class MainViewModel : ObservableObject
     {
         CurrentView = "Payments";
         Title = "GymManager - Pagos";
+        MessageBox.Show("Módulo de Pagos - Próximamente", "En Desarrollo",
+            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
@@ -151,6 +187,8 @@ public partial class MainViewModel : ObservableObject
     {
         CurrentView = "Sales";
         Title = "GymManager - Ventas";
+        MessageBox.Show("Módulo de Ventas - Próximamente", "En Desarrollo",
+            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
@@ -158,6 +196,8 @@ public partial class MainViewModel : ObservableObject
     {
         CurrentView = "Classes";
         Title = "GymManager - Clases";
+        MessageBox.Show("Módulo de Clases - Próximamente", "En Desarrollo",
+            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
@@ -165,6 +205,8 @@ public partial class MainViewModel : ObservableObject
     {
         CurrentView = "Reports";
         Title = "GymManager - Reportes";
+        MessageBox.Show("Módulo de Reportes - Próximamente", "En Desarrollo",
+            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
@@ -172,5 +214,7 @@ public partial class MainViewModel : ObservableObject
     {
         CurrentView = "Settings";
         Title = "GymManager - Configuración";
+        MessageBox.Show("Módulo de Configuración - Próximamente", "En Desarrollo",
+            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }
