@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NpgsqlTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,23 +12,15 @@ namespace GymManager.Domain.Enums;
 /// </summary>
 public enum EnrollmentStatus
 {
-    /// <summary>
-    /// Inscrito en la clase
-    /// </summary>
-    Enrolled = 0,
+    [PgName("ENROLLED")]
+    ENROLLED = 0,
 
-    /// <summary>
-    /// Asistió a la clase
-    /// </summary>
-    Attended = 1,
+    [PgName("ATTENDED")]
+    ATTENDED = 1,
 
-    /// <summary>
-    /// No se presentó a la clase
-    /// </summary>
-    NoShow = 2,
+    [PgName("NO_SHOW")]
+    NO_SHOW = 2,
 
-    /// <summary>
-    /// Canceló su inscripción
-    /// </summary>
-    Cancelled = 3
+    [PgName("CANCELLED")]
+    CANCELLED = 3
 }

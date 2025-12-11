@@ -10,45 +10,50 @@ namespace GymManager.Domain.Common;
 /// Clase base para todas las entidades con campos de auditoría
 /// Todas las entidades del sistema heredan de esta clase
 /// </summary>
+/// <summary>
+/// Clase base para todas las entidades con campos de auditoria
+/// Todas las entidades del sistema heredan de esta clase
+/// </summary>
 public abstract class AuditableEntity : ISoftDeletable
 {
     /// <summary>
-    /// Fecha y hora de creación del registro (UTC)
+    /// Fecha y hora de creacion del registro (UTC)
     /// </summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
-    /// Usuario que creó el registro
+    /// ID del usuario que creo el registro (UUID en PostgreSQL)
     /// </summary>
-    public string? CreatedBy { get; set; }
+    public Guid? CreatedBy { get; set; }
 
     /// <summary>
-    /// Fecha y hora de última actualización (UTC)
+    /// Fecha y hora de ultima actualizacion (UTC)
     /// </summary>
     public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
-    /// Usuario que realizó la última actualización
+    /// ID del usuario que realizo la ultima actualizacion (UUID en PostgreSQL)
     /// </summary>
-    public string? UpdatedBy { get; set; }
+    public Guid? UpdatedBy { get; set; }
 
     /// <summary>
-    /// Fecha de eliminación lógica (null = registro activo)
+    /// Fecha de eliminacion logica (null = registro activo)
     /// </summary>
     public DateTime? DeletedAt { get; set; }
 
     /// <summary>
-    /// Usuario que eliminó el registro
+    /// ID del usuario que elimino el registro (UUID en PostgreSQL)
+    /// NOTA: Esta columna no existe en todas las tablas de PostgreSQL
     /// </summary>
-    public string? DeletedBy { get; set; }
+    public Guid? DeletedBy { get; set; }
 
     /// <summary>
-    /// Indica si el registro está activo
+    /// Indica si el registro esta activo
     /// </summary>
     public bool IsActive { get; set; } = true;
 
     /// <summary>
-    /// Verifica si el registro ha sido eliminado lógicamente
+    /// Verifica si el registro ha sido eliminado logicamente
     /// </summary>
     public bool IsDeleted => DeletedAt.HasValue;
 }

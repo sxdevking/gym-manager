@@ -36,7 +36,7 @@ public class ClassEnrollment : AuditableEntity
     /// <summary>
     /// Estado de la inscripción
     /// </summary>
-    public EnrollmentStatus Status { get; set; } = EnrollmentStatus.Enrolled;
+    public EnrollmentStatus Status { get; set; } = EnrollmentStatus.ENROLLED;
 
     /// <summary>
     /// Fecha y hora de check-in a la clase

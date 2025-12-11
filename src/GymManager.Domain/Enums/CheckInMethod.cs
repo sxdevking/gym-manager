@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NpgsqlTypes;
 
 namespace GymManager.Domain.Enums;
 
@@ -11,23 +12,15 @@ namespace GymManager.Domain.Enums;
 /// </summary>
 public enum CheckInMethod
 {
-    /// <summary>
-    /// Tarjeta de acceso
-    /// </summary>
-    Card = 0,
+    [PgName("CARD")]
+    CARD = 0,
 
-    /// <summary>
-    /// Código QR
-    /// </summary>
+    [PgName("QR")]
     QR = 1,
 
-    /// <summary>
-    /// Huella digital u otro biométrico
-    /// </summary>
-    Biometric = 2,
+    [PgName("BIOMETRIC")]
+    BIOMETRIC = 2,
 
-    /// <summary>
-    /// Registro manual por staff
-    /// </summary>
-    Manual = 3
+    [PgName("MANUAL")]
+    MANUAL = 3
 }

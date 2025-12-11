@@ -36,7 +36,7 @@ public class Membership : AuditableEntity
     /// <summary>
     /// Estado actual de la membresía
     /// </summary>
-    public MembershipStatus Status { get; set; } = MembershipStatus.Active;
+    public MembershipStatus Status { get; set; } = MembershipStatus.ACTIVE;
 
     /// <summary>
     /// Precio pagado (puede diferir del precio del plan por descuentos)
@@ -66,7 +66,7 @@ public class Membership : AuditableEntity
     /// Indica si la membresía está vigente
     /// </summary>
     public bool IsCurrentlyActive =>
-        Status == MembershipStatus.Active &&
+        Status == MembershipStatus.ACTIVE &&
         DateTime.UtcNow >= StartDate &&
         DateTime.UtcNow <= EndDate;
 
@@ -74,7 +74,7 @@ public class Membership : AuditableEntity
     /// Días restantes de la membresía
     /// </summary>
     public int DaysRemaining =>
-        Status == MembershipStatus.Active
+        Status == MembershipStatus.ACTIVE
             ? Math.Max(0, (EndDate - DateTime.UtcNow).Days)
             : 0;
 

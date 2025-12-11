@@ -13,32 +13,23 @@ public class BranchSettingsConfiguration : IEntityTypeConfiguration<BranchSettin
     {
         builder.ToTable("branchsettings");
 
-        // La PK en SQL es setting_id, pero en C# usamos BranchId como PK
-        builder.HasKey(bs => bs.BranchId);
+        // La PK real en SQL es setting_id
+        builder.HasKey(bs => bs.SettingId);
 
         // ═══════════════════════════════════════════════════════════
         // MAPEO DE PROPIEDADES A COLUMNAS
         // ═══════════════════════════════════════════════════════════
 
+        builder.Property(bs => bs.SettingId)
+            .HasColumnName("setting_id");
+
         builder.Property(bs => bs.BranchId)
-            .HasColumnName("branch_id");
+            .HasColumnName("branch_id")
+            .IsRequired();
 
-        builder.Property(bs => bs.BusinessName)
-            .HasColumnName("business_name")
-            .HasMaxLength(150);
-
-        // C#: LogoBase64 -> SQL: logo_path
-        builder.Property(bs => bs.LogoBase64)
-            .HasColumnName("logo_path")
-            .HasMaxLength(500);
-
-        builder.Property(bs => bs.LogoSmallPath)
-            .HasColumnName("logo_small_path")
-            .HasMaxLength(500);
-
-        builder.Property(bs => bs.FaviconPath)
-            .HasColumnName("favicon_path")
-            .HasMaxLength(500);
+        // ═══════════════════════════════════════════════════════════
+        // COLORES DE MARCA
+        // ═══════════════════════════════════════════════════════════
 
         builder.Property(bs => bs.PrimaryColor)
             .HasColumnName("primary_color")
@@ -52,9 +43,37 @@ public class BranchSettingsConfiguration : IEntityTypeConfiguration<BranchSettin
             .HasColumnName("accent_color")
             .HasMaxLength(7);
 
+        // ═══════════════════════════════════════════════════════════
+        // LOGOTIPOS
+        // ═══════════════════════════════════════════════════════════
+
+        builder.Property(bs => bs.LogoPath)
+            .HasColumnName("logo_path")
+            .HasMaxLength(500);
+
+        builder.Property(bs => bs.LogoSmallPath)
+            .HasColumnName("logo_small_path")
+            .HasMaxLength(500);
+
+        builder.Property(bs => bs.FaviconPath)
+            .HasColumnName("favicon_path")
+            .HasMaxLength(500);
+
+        // ═══════════════════════════════════════════════════════════
+        // INFORMACION FISCAL
+        // ═══════════════════════════════════════════════════════════
+
+        builder.Property(bs => bs.BusinessName)
+            .HasColumnName("business_name")
+            .HasMaxLength(150);
+
         builder.Property(bs => bs.TaxId)
             .HasColumnName("tax_id")
             .HasMaxLength(50);
+
+        // ═══════════════════════════════════════════════════════════
+        // PERSONALIZACION DE RECIBOS
+        // ═══════════════════════════════════════════════════════════
 
         builder.Property(bs => bs.ReceiptHeader)
             .HasColumnName("receipt_header")
@@ -63,9 +82,6 @@ public class BranchSettingsConfiguration : IEntityTypeConfiguration<BranchSettin
         builder.Property(bs => bs.ReceiptFooter)
             .HasColumnName("receipt_footer")
             .HasColumnType("text");
-
-        // C#: TicketInfo no existe en SQL, ignorar
-        builder.Ignore(bs => bs.TicketInfo);
 
         // ═══════════════════════════════════════════════════════════
         // CONFIGURACION REGIONAL
@@ -111,7 +127,8 @@ public class BranchSettingsConfiguration : IEntityTypeConfiguration<BranchSettin
         builder.Property(bs => bs.UpdatedAt)
             .HasColumnName("updated_at");
 
-        // Ignorar propiedades de auditoria que no existen en la tabla
+        // Ignorar propiedades de auditoria que no existen en esta tabla
+        builder.Ignore(bs => bs.IsActive);
         builder.Ignore(bs => bs.DeletedBy);
         builder.Ignore(bs => bs.IsDeleted);
         builder.Ignore(bs => bs.DeletedAt);
@@ -119,10 +136,18 @@ public class BranchSettingsConfiguration : IEntityTypeConfiguration<BranchSettin
         builder.Ignore(bs => bs.UpdatedBy);
 
         // ═══════════════════════════════════════════════════════════
+        // INDICES
+        // ═══════════════════════════════════════════════════════════
+
+        builder.HasIndex(bs => bs.BranchId)
+            .IsUnique()
+            .HasDatabaseName("uq_branchsettings_branch_id");
+
+        // ═══════════════════════════════════════════════════════════
         // RELACIONES
         // ═══════════════════════════════════════════════════════════
 
-        // CORREGIDO: Usar "Settings" (como está en Branch.cs) en lugar de "BranchSettings"
+        // Relacion 1:1 con Branch
         builder.HasOne(bs => bs.Branch)
             .WithOne(b => b.Settings)
             .HasForeignKey<BranchSettings>(bs => bs.BranchId)

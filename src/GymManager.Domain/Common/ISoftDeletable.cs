@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 namespace GymManager.Domain.Common;
 
 /// <summary>
-/// Interface para implementar borrado lógico (soft delete)
-/// Las entidades que implementen esta interface no se eliminarán físicamente
+/// Interface para implementar borrado logico (soft delete)
+/// Las entidades que implementen esta interface no se eliminaran fisicamente
 /// </summary>
 public interface ISoftDeletable
 {
     /// <summary>
-    /// Fecha y hora en que el registro fue eliminado (null si está activo)
+    /// Fecha y hora en que el registro fue eliminado (null si esta activo)
     /// </summary>
     DateTime? DeletedAt { get; set; }
 
     /// <summary>
-    /// Usuario que eliminó el registro
+    /// ID del usuario que elimino el registro (UUID en PostgreSQL)
     /// </summary>
-    string? DeletedBy { get; set; }
+    Guid? DeletedBy { get; set; }
 }

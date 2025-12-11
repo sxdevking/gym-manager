@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NpgsqlTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,17 +13,21 @@ namespace GymManager.Domain.Enums;
 public enum LicenseType
 {
     /// <summary>
-    /// Licencia de prueba (30 días, 1 sucursal, 3 usuarios)
+    /// Licencia de prueba (30 dias, 1 sucursal, 3 usuarios)
     /// </summary>
-    Trial = 0,
+    [PgName("TRIAL")]
+    TRIAL = 0,
 
     /// <summary>
-    /// Licencia estándar (1 sucursal, 10 usuarios)
+    /// Licencia estandar (1 sucursal, 10 usuarios)
     /// </summary>
-    Standard = 1,
+    [PgName("STANDARD")]
+    STANDARD = 1,
 
     /// <summary>
     /// Licencia empresarial (sucursales y usuarios ilimitados)
     /// </summary>
-    Enterprise = 2
+    [PgName("ENTERPRISE")]
+    ENTERPRISE = 2
 }
+

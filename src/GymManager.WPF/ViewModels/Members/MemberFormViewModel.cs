@@ -1,13 +1,10 @@
-﻿using AutoMapper.Execution;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GymManager.Domain.Entities;
 using GymManager.Domain.Enums;
 using GymManager.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
 using System.Windows;
 
 namespace GymManager.WPF.ViewModels.Members;
@@ -62,7 +59,7 @@ public partial class MemberFormViewModel : ObservableObject
     [ObservableProperty]
     private string _errorMessage = string.Empty;
 
-    // Lista de géneros para el ComboBox
+    // Lista de generos para el ComboBox
     public IEnumerable<Gender> Genders => Enum.GetValues<Gender>();
 
     // Evento cuando se guarda exitosamente
@@ -98,7 +95,7 @@ public partial class MemberFormViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Carga los datos del miembro para edición
+    /// Carga los datos del miembro para edicion
     /// </summary>
     private async Task LoadMemberAsync(Guid memberId)
     {
@@ -118,8 +115,8 @@ public partial class MemberFormViewModel : ObservableObject
                 Email = member.Email ?? string.Empty;
                 Phone = member.Phone ?? string.Empty;
                 BirthDate = member.BirthDate.HasValue
-    ? member.BirthDate.Value.ToDateTime(TimeOnly.MinValue)
-    : null;
+                    ? member.BirthDate.Value.ToDateTime(TimeOnly.MinValue)
+                    : null;
                 SelectedGender = member.Gender;
                 Address = member.Address ?? string.Empty;
                 EmergencyContact = member.EmergencyContact ?? string.Empty;
@@ -138,7 +135,8 @@ public partial class MemberFormViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Genera un código de miembro automático
+    /// Genera un codigo de miembro automatico UNICO
+    /// Formato: MEM-YYYYMMDD-XXX (ej: MEM-20241211-001)
     /// </summary>
     private async Task GenerateMemberCodeAsync()
     {
@@ -147,14 +145,40 @@ public partial class MemberFormViewModel : ObservableObject
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<GymDbContext>();
 
-            // Generar código: MEM-YYYYMMDD-XXX
             var today = DateTime.Now.ToString("yyyyMMdd");
-            var count = context.Members.Count(m => m.MemberCode.StartsWith($"MEM-{today}")) + 1;
-            MemberCode = $"MEM-{today}-{count:D3}";
+            var prefix = $"MEM-{today}-";
+
+            // Buscar el ultimo codigo del dia para incrementar
+            var lastMember = await context.Members
+                .Where(m => m.MemberCode.StartsWith(prefix))
+                .OrderByDescending(m => m.MemberCode)
+                .FirstOrDefaultAsync();
+
+            int nextNumber = 1;
+            if (lastMember != null)
+            {
+                // Extraer el numero del ultimo codigo (MEM-20241211-005 -> 5)
+                var lastCode = lastMember.MemberCode;
+                var lastNumberStr = lastCode.Substring(prefix.Length);
+                if (int.TryParse(lastNumberStr, out int lastNumber))
+                {
+                    nextNumber = lastNumber + 1;
+                }
+            }
+
+            MemberCode = $"{prefix}{nextNumber:D3}";
         }
-        catch
+        catch (Exception ex)
         {
+            // Fallback: usar timestamp unico
             MemberCode = $"MEM-{DateTime.Now:yyyyMMddHHmmss}";
+            System.Diagnostics.Debug.WriteLine($"Error generando codigo: {ex.Message}");
+        }
+
+        // Asegurar que nunca quede vacio
+        if (string.IsNullOrWhiteSpace(MemberCode))
+        {
+            MemberCode = $"MEM-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()}";
         }
     }
 
@@ -182,6 +206,13 @@ public partial class MemberFormViewModel : ObservableObject
     /// </summary>
     private bool ValidateForm()
     {
+        // Validar MemberCode
+        if (string.IsNullOrWhiteSpace(MemberCode))
+        {
+            ErrorMessage = "El codigo de miembro es requerido";
+            return false;
+        }
+
         if (string.IsNullOrWhiteSpace(FirstName))
         {
             ErrorMessage = "El nombre es requerido";
@@ -196,7 +227,7 @@ public partial class MemberFormViewModel : ObservableObject
 
         if (!string.IsNullOrWhiteSpace(Email) && !Email.Contains('@'))
         {
-            ErrorMessage = "El email no es válido";
+            ErrorMessage = "El email no es valido";
             return false;
         }
 
@@ -230,8 +261,8 @@ public partial class MemberFormViewModel : ObservableObject
                     member.Email = string.IsNullOrWhiteSpace(Email) ? null : Email.Trim();
                     member.Phone = string.IsNullOrWhiteSpace(Phone) ? null : Phone.Trim();
                     member.BirthDate = BirthDate.HasValue
-    ? DateOnly.FromDateTime(BirthDate.Value)
-    : null;
+                        ? DateOnly.FromDateTime(BirthDate.Value)
+                        : null;
                     member.Gender = SelectedGender;
                     member.Address = string.IsNullOrWhiteSpace(Address) ? null : Address.Trim();
                     member.EmergencyContact = string.IsNullOrWhiteSpace(EmergencyContact) ? null : EmergencyContact.Trim();
@@ -242,19 +273,31 @@ public partial class MemberFormViewModel : ObservableObject
             }
             else
             {
+                // Verificar que el codigo no exista
+                var existingCode = await context.Members
+                    .AnyAsync(m => m.MemberCode == MemberCode);
+
+                if (existingCode)
+                {
+                    // Regenerar codigo si ya existe
+                    await GenerateMemberCodeAsync();
+                }
+
                 // Crear nuevo
+                var branchId = await GetOrCreateDefaultBranchIdAsync(context);
+
                 var newMember = new GymManager.Domain.Entities.Member
                 {
                     MemberId = Guid.NewGuid(),
-                    BranchId = await GetDefaultBranchIdAsync(context),
-                    MemberCode = MemberCode,
+                    BranchId = branchId,
+                    MemberCode = MemberCode.Trim(),
                     FirstName = FirstName.Trim(),
                     LastName = LastName.Trim(),
                     Email = string.IsNullOrWhiteSpace(Email) ? null : Email.Trim(),
                     Phone = string.IsNullOrWhiteSpace(Phone) ? null : Phone.Trim(),
                     BirthDate = BirthDate.HasValue
-    ? DateOnly.FromDateTime(BirthDate.Value)
-    : null,
+                        ? DateOnly.FromDateTime(BirthDate.Value)
+                        : null,
                     Gender = SelectedGender,
                     Address = string.IsNullOrWhiteSpace(Address) ? null : Address.Trim(),
                     EmergencyContact = string.IsNullOrWhiteSpace(EmergencyContact) ? null : EmergencyContact.Trim(),
@@ -271,11 +314,30 @@ public partial class MemberFormViewModel : ObservableObject
 
             MessageBox.Show(
                 _memberId.HasValue ? "Miembro actualizado correctamente" : "Miembro creado correctamente",
-                "Éxito",
+                "Exito",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
 
             OnSaveCompleted?.Invoke();
+        }
+        catch (DbUpdateException dbEx)
+        {
+            var innerMessage = dbEx.InnerException?.Message ?? dbEx.Message;
+
+            // Detectar error de duplicado
+            if (innerMessage.Contains("uq_members_member_code") || innerMessage.Contains("duplicate"))
+            {
+                ErrorMessage = "El codigo de miembro ya existe. Generando nuevo codigo...";
+                await GenerateMemberCodeAsync();
+                MessageBox.Show($"El codigo ya existia. Se genero uno nuevo: {MemberCode}", "Aviso",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                ErrorMessage = $"Error de BD: {innerMessage}";
+                MessageBox.Show($"Error al guardar: {innerMessage}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         catch (Exception ex)
         {
@@ -290,28 +352,61 @@ public partial class MemberFormViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Obtiene el ID de la sucursal por defecto
+    /// Obtiene o crea la sucursal por defecto (y la licencia si es necesario)
     /// </summary>
-    private async Task<Guid> GetDefaultBranchIdAsync(GymDbContext context)
+    private async Task<Guid> GetOrCreateDefaultBranchIdAsync(GymDbContext context)
     {
+        // Buscar sucursal existente
         var branch = await context.Branches
             .Where(b => b.IsActive && b.DeletedAt == null)
             .FirstOrDefaultAsync();
 
-        if (branch == null)
+        if (branch != null)
         {
-            // Crear sucursal por defecto si no existe
-            branch = new Branch
+            return branch.BranchId;
+        }
+
+        // No hay sucursal, necesitamos crear una con su licencia
+
+        // Paso 1: Buscar o crear licencia
+        var license = await context.Set<License>()
+            .Where(l => l.IsActive)
+            .FirstOrDefaultAsync();
+
+        if (license == null)
+        {
+            // Crear licencia por defecto (Trial)
+            license = new License
             {
-                BranchId = Guid.NewGuid(),
-                Code = "GYM-001",
-                Name = "Sucursal Principal",
+                LicenseId = Guid.NewGuid(),
+                LicenseKey = $"TRIAL-{Guid.NewGuid():N}".Substring(0, 32).ToUpper(),
+                HardwareId = Environment.MachineName + "-" + Guid.NewGuid().ToString("N").Substring(0, 8),
+                LicenseType = LicenseType.TRIAL,
+                MaxBranches = 1,
+                MaxUsers = 5,
+                IssuedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(30),
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             };
-            context.Branches.Add(branch);
+            context.Set<License>().Add(license);
             await context.SaveChangesAsync();
         }
+
+        // Paso 2: Crear sucursal con la licencia
+        branch = new Branch
+        {
+            BranchId = Guid.NewGuid(),
+            LicenseId = license.LicenseId,
+            BranchCode = "GYM-001",
+            BranchName = "Sucursal Principal",
+            Country = "Mexico",
+            IsHeadquarters = true,
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
+        };
+        context.Branches.Add(branch);
+        await context.SaveChangesAsync();
 
         return branch.BranchId;
     }

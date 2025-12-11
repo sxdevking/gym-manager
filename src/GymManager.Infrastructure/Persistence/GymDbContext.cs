@@ -1,6 +1,8 @@
 ﻿using GymManager.Domain.Common;
 using GymManager.Domain.Entities;
+using GymManager.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace GymManager.Infrastructure.Persistence;
 
@@ -10,11 +12,29 @@ namespace GymManager.Infrastructure.Persistence;
 /// </summary>
 public class GymDbContext : DbContext
 {
+    // ═══════════════════════════════════════════════════════════
+    // REGISTRO ESTATICO DE ENUMS (debe ejecutarse UNA vez al inicio)
+    // ═══════════════════════════════════════════════════════════
+    static GymDbContext()
+    {
+        // Registrar los enums de PostgreSQL en Npgsql
+        // Esto mapea los enums de C# a los tipos ENUM de PostgreSQL
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<LicenseType>("gym.license_type_enum");
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<MembershipStatus>("gym.membership_status_enum");
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<PaymentStatus>("gym.payment_status_enum");
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<SaleStatus>("gym.sale_status_enum");
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<EnrollmentStatus>("gym.enrollment_status_enum");
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<CheckInMethod>("gym.checkin_method_enum");
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Gender>("gym.gender_enum");
+    }
+
     public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
     {
     }
 
-    // ==================== DbSets ====================
+    // ═══════════════════════════════════════════════════════════
+    // DbSets
+    // ═══════════════════════════════════════════════════════════
     public DbSet<License> Licenses => Set<License>();
     public DbSet<Branch> Branches => Set<Branch>();
     public DbSet<BranchSettings> BranchSettings => Set<BranchSettings>();
@@ -43,6 +63,17 @@ public class GymDbContext : DbContext
         // Schema por defecto
         modelBuilder.HasDefaultSchema("gym");
 
+        // ═══════════════════════════════════════════════════════════
+        // REGISTRAR ENUMS DE POSTGRESQL
+        // ═══════════════════════════════════════════════════════════
+        modelBuilder.HasPostgresEnum<LicenseType>("gym", "license_type_enum");
+        modelBuilder.HasPostgresEnum<MembershipStatus>("gym", "membership_status_enum");
+        modelBuilder.HasPostgresEnum<PaymentStatus>("gym", "payment_status_enum");
+        modelBuilder.HasPostgresEnum<SaleStatus>("gym", "sale_status_enum");
+        modelBuilder.HasPostgresEnum<EnrollmentStatus>("gym", "enrollment_status_enum");
+        modelBuilder.HasPostgresEnum<CheckInMethod>("gym", "checkin_method_enum");
+        modelBuilder.HasPostgresEnum<Gender>("gym", "gender_enum");
+
         // Aplicar todas las configuraciones del ensamblado
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GymDbContext).Assembly);
     }
@@ -59,14 +90,14 @@ public class GymDbContext : DbContext
     /// <summary>
     /// Override de SaveChangesAsync para auditoria automatica
     /// </summary>
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         UpdateAuditFields();
-        return base.SaveChangesAsync(cancellationToken);
+        return await base.SaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
-    /// Actualiza campos de auditoria automaticamente
+    /// Actualiza los campos de auditoria automaticamente
     /// </summary>
     private void UpdateAuditFields()
     {
@@ -86,7 +117,7 @@ public class GymDbContext : DbContext
                     break;
 
                 case EntityState.Deleted:
-                    // Convertir delete fisico a soft delete
+                    // Convertir a soft delete
                     entry.State = EntityState.Modified;
                     entry.Entity.DeletedAt = DateTime.UtcNow;
                     entry.Entity.IsActive = false;

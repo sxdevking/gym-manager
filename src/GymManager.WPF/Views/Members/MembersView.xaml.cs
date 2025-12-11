@@ -11,16 +11,14 @@ public partial class MembersView : UserControl
     public MembersView()
     {
         InitializeComponent();
-    }
 
-    /// <summary>
-    /// Se llama cuando el DataContext cambia
-    /// </summary>
-    public async void Initialize()
-    {
-        if (DataContext is MembersViewModel viewModel)
+        // Cargar miembros cuando se cargue la vista
+        Loaded += async (s, e) =>
         {
-            await viewModel.LoadMembersAsync();
-        }
+            if (DataContext is MembersViewModel vm)
+            {
+                await vm.LoadMembersAsync();
+            }
+        };
     }
 }

@@ -16,32 +16,65 @@ public class MembershipConfiguration : IEntityTypeConfiguration<Membership>
 
         builder.HasKey(m => m.MembershipId);
 
+        builder.Property(m => m.MembershipId)
+            .HasColumnName("membership_id");
+
+        builder.Property(m => m.MemberId)
+            .HasColumnName("member_id")
+            .IsRequired();
+
+        builder.Property(m => m.PlanId)
+            .HasColumnName("plan_id")
+            .IsRequired();
+
         builder.Property(m => m.StartDate)
+            .HasColumnName("start_date")
             .IsRequired();
 
         builder.Property(m => m.EndDate)
+            .HasColumnName("end_date")
             .IsRequired();
 
-        // Enum Status
+        // ENUM NATIVO DE POSTGRESQL - NO usar HasConversion
         builder.Property(m => m.Status)
-            .HasConversion(
-                v => v.ToString().ToUpper(),
-                v => Enum.Parse<MembershipStatus>(v, true))
-            .HasMaxLength(20);
+            .HasColumnName("status");
 
         builder.Property(m => m.PricePaid)
+            .HasColumnName("price_paid")
             .HasPrecision(10, 2);
 
-        // C#: FreezeDaysUsed -> SQL: frozen_days_used
         builder.Property(m => m.FreezeDaysUsed)
             .HasColumnName("frozen_days_used");
 
-        // C#: FreezeStartDate -> SQL: frozen_at
         builder.Property(m => m.FreezeStartDate)
             .HasColumnName("frozen_at");
 
         builder.Property(m => m.Notes)
+            .HasColumnName("notes")
             .HasColumnType("text");
+
+        // Auditoria
+        builder.Property(m => m.IsActive)
+            .HasColumnName("is_active");
+
+        builder.Property(m => m.CreatedAt)
+            .HasColumnName("created_at");
+
+        builder.Property(m => m.CreatedBy)
+            .HasColumnName("created_by");
+
+        builder.Property(m => m.UpdatedAt)
+            .HasColumnName("updated_at");
+
+        builder.Property(m => m.UpdatedBy)
+            .HasColumnName("updated_by");
+
+        // Ignorar
+        builder.Ignore(m => m.DeletedBy);
+        builder.Ignore(m => m.IsDeleted);
+        builder.Ignore(m => m.DeletedAt);
+        builder.Ignore(m => m.IsCurrentlyActive);
+        builder.Ignore(m => m.DaysRemaining);
 
         // Indices
         builder.HasIndex(m => m.MemberId);
@@ -59,16 +92,5 @@ public class MembershipConfiguration : IEntityTypeConfiguration<Membership>
             .WithMany(mp => mp.Memberships)
             .HasForeignKey(m => m.PlanId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        // Ignorar propiedades de auditoria que no existen
-        builder.Ignore(m => m.DeletedBy);
-        builder.Ignore(m => m.IsDeleted);
-
-        // Ignorar propiedades calculadas
-        builder.Ignore(m => m.IsCurrentlyActive);
-        builder.Ignore(m => m.DaysRemaining);
-
-        // Filtro soft delete
-        builder.HasQueryFilter(m => m.DeletedAt == null);
     }
 }

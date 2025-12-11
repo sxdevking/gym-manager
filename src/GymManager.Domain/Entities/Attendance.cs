@@ -36,7 +36,7 @@ public class Attendance : AuditableEntity
     /// <summary>
     /// Método utilizado para el check-in
     /// </summary>
-    public CheckInMethod CheckInMethod { get; set; } = CheckInMethod.Manual;
+    public CheckInMethod CheckInMethod { get; set; } = CheckInMethod.MANUAL;
 
     /// <summary>
     /// Duración de la visita en minutos (calculado automáticamente)

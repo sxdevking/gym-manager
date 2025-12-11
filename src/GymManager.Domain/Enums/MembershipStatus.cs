@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NpgsqlTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,23 +12,15 @@ namespace GymManager.Domain.Enums;
 /// </summary>
 public enum MembershipStatus
 {
-    /// <summary>
-    /// Membresía activa y vigente
-    /// </summary>
-    Active = 0,
+    [PgName("ACTIVE")]
+    ACTIVE = 0,
 
-    /// <summary>
-    /// Membresía expirada (fecha fin alcanzada)
-    /// </summary>
-    Expired = 1,
+    [PgName("EXPIRED")]
+    EXPIRED = 1,
 
-    /// <summary>
-    /// Membresía congelada temporalmente
-    /// </summary>
-    Frozen = 2,
+    [PgName("FROZEN")]
+    FROZEN = 2,
 
-    /// <summary>
-    /// Membresía cancelada por el usuario o administrador
-    /// </summary>
-    Cancelled = 3
+    [PgName("CANCELLED")]
+    CANCELLED = 3
 }

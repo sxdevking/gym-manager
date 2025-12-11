@@ -1,0 +1,250 @@
+﻿<Window x:Class="GymManager.WPF.Views.Members.MemberFormWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="{Binding Title}"
+        Height="650" Width="500"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
+        Background="#1E293B">
+
+    <Window.Resources>
+        <!-- Estilo para TextBox -->
+        <Style x:Key="FormTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#334155"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#475569"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Estilo para Labels -->
+        <Style x:Key="FormLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <!-- Estilo para Botones -->
+        <Style x:Key="FormButton" TargetType="Button">
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="{Binding Title}" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="White"/>
+            <TextBlock Text="Complete la informacion del miembro" 
+                       FontSize="12" 
+                       Foreground="#64748B"
+                       Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- FORMULARIO -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Codigo de Miembro (Solo lectura) -->
+                <StackPanel Margin="0,0,0,12">
+                    <TextBlock Text="Codigo de Miembro" Style="{StaticResource FormLabel}"/>
+                    <TextBox Text="{Binding MemberCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource FormTextBox}"
+                             IsReadOnly="True"
+                             Background="#1E293B"/>
+                </StackPanel>
+
+                <!-- Nombre y Apellido en fila -->
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Nombre *" Style="{StaticResource FormLabel}"/>
+                        <TextBox Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource FormTextBox}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Apellido *" Style="{StaticResource FormLabel}"/>
+                        <TextBox Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource FormTextBox}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Email -->
+                <StackPanel Margin="0,0,0,12">
+                    <TextBlock Text="Email" Style="{StaticResource FormLabel}"/>
+                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource FormTextBox}"/>
+                </StackPanel>
+
+                <!-- Telefono y Fecha de Nacimiento -->
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Telefono" Style="{StaticResource FormLabel}"/>
+                        <TextBox Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource FormTextBox}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Fecha de Nacimiento" Style="{StaticResource FormLabel}"/>
+                        <DatePicker SelectedDate="{Binding BirthDate, Mode=TwoWay}"
+                                    Background="#334155"
+                                    Foreground="White"
+                                    BorderBrush="#475569"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Genero -->
+                <StackPanel Margin="0,0,0,12">
+                    <TextBlock Text="Genero" Style="{StaticResource FormLabel}"/>
+                    <ComboBox ItemsSource="{Binding Genders}"
+                              SelectedItem="{Binding SelectedGender, Mode=TwoWay}"
+                              Background="#334155"
+                              Foreground="White"
+                              BorderBrush="#475569"
+                              Padding="10,8">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Foreground="Black"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Direccion -->
+                <StackPanel Margin="0,0,0,12">
+                    <TextBlock Text="Direccion" Style="{StaticResource FormLabel}"/>
+                    <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource FormTextBox}"/>
+                </StackPanel>
+
+                <!-- Contacto de Emergencia -->
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Contacto de Emergencia" Style="{StaticResource FormLabel}"/>
+                        <TextBox Text="{Binding EmergencyContact, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource FormTextBox}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Tel. Emergencia" Style="{StaticResource FormLabel}"/>
+                        <TextBox Text="{Binding EmergencyPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource FormTextBox}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Notas -->
+                <StackPanel Margin="0,0,0,12">
+                    <TextBlock Text="Notas" Style="{StaticResource FormLabel}"/>
+                    <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource FormTextBox}"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             Height="60"
+                             VerticalContentAlignment="Top"/>
+                </StackPanel>
+
+                <!-- Mensaje de Error -->
+                <TextBlock Text="{Binding ErrorMessage}" 
+                           Foreground="#EF4444" 
+                           FontSize="12"
+                           TextWrapping="Wrap"
+                           Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                           Margin="0,0,0,12"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- BOTONES -->
+        <Grid Grid.Row="2" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1"
+                    Content="Cancelar"
+                    Command="{Binding CancelCommand}"
+                    Background="#475569"
+                    Foreground="White"
+                    Style="{StaticResource FormButton}"
+                    Width="100"/>
+
+            <Button Grid.Column="3"
+                    Content="Guardar"
+                    Command="{Binding SaveCommand}"
+                    Background="#10B981"
+                    Foreground="White"
+                    Style="{StaticResource FormButton}"
+                    Width="100"/>
+        </Grid>
+
+        <!-- Loading Overlay -->
+        <Border Grid.Row="0" Grid.RowSpan="3"
+                Background="#80000000"
+                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Guardando..." 
+                           Foreground="White" 
+                           FontSize="16"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

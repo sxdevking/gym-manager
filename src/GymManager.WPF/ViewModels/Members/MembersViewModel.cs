@@ -2,16 +2,16 @@
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GymManager.Application.Common.Interfaces;
 using GymManager.Domain.Entities;
 using GymManager.Infrastructure.Persistence;
+using GymManager.WPF.Views.Members;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GymManager.WPF.ViewModels.Members;
 
 /// <summary>
-/// ViewModel para la lista de miembros
+/// ViewModel para la lista de miembros (CRUD completo)
 /// </summary>
 public partial class MembersViewModel : ObservableObject
 {
@@ -35,9 +35,6 @@ public partial class MembersViewModel : ObservableObject
     [ObservableProperty]
     private int _totalCount;
 
-    // Evento para solicitar apertura de formulario
-    public event Action<Member?>? OnEditMemberRequested;
-
     public MembersViewModel(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -57,8 +54,22 @@ public partial class MembersViewModel : ObservableObject
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<GymDbContext>();
 
-            var membersList = await context.Members
-                .Where(m => m.IsActive && m.DeletedAt == null)
+            var query = context.Members
+                .Where(m => m.IsActive && m.DeletedAt == null);
+
+            // Aplicar filtro de busqueda
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                var search = SearchText.ToLower();
+                query = query.Where(m =>
+                    m.FirstName.ToLower().Contains(search) ||
+                    m.LastName.ToLower().Contains(search) ||
+                    m.MemberCode.ToLower().Contains(search) ||
+                    (m.Email != null && m.Email.ToLower().Contains(search)) ||
+                    (m.Phone != null && m.Phone.Contains(search)));
+            }
+
+            var membersList = await query
                 .OrderBy(m => m.FirstName)
                 .ThenBy(m => m.LastName)
                 .ToListAsync();
@@ -85,74 +96,80 @@ public partial class MembersViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Busca miembros por nombre o código
+    /// Busca miembros
     /// </summary>
     [RelayCommand]
-    public async Task SearchMembersAsync()
+    private async Task SearchAsync()
+    {
+        await LoadMembersAsync();
+    }
+
+    /// <summary>
+    /// Abre ventana modal para agregar nuevo miembro
+    /// </summary>
+    [RelayCommand]
+    private async Task AddMemberAsync()
     {
         try
         {
-            IsLoading = true;
-
-            using var scope = _serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<GymDbContext>();
-
-            var query = context.Members
-                .Where(m => m.IsActive && m.DeletedAt == null);
-
-            if (!string.IsNullOrWhiteSpace(SearchText))
+            var window = new MemberFormWindow(_serviceProvider)
             {
-                var searchLower = SearchText.ToLower();
-                query = query.Where(m =>
-                    m.FirstName.ToLower().Contains(searchLower) ||
-                    m.LastName.ToLower().Contains(searchLower) ||
-                    m.MemberCode.ToLower().Contains(searchLower) ||
-                    (m.Email != null && m.Email.ToLower().Contains(searchLower)) ||
-                    (m.Phone != null && m.Phone.Contains(searchLower)));
-            }
+                Owner = System.Windows.Application.Current.MainWindow
+            };
 
-            var membersList = await query
-                .OrderBy(m => m.FirstName)
-                .ThenBy(m => m.LastName)
-                .ToListAsync();
+            await window.InitializeNewAsync();
 
-            Members.Clear();
-            foreach (var member in membersList)
+            var result = window.ShowDialog();
+
+            if (result == true && window.IsSaved)
             {
-                Members.Add(member);
+                // Refrescar lista
+                await LoadMembersAsync();
+                StatusMessage = "Miembro agregado correctamente";
             }
-
-            TotalCount = Members.Count;
-            StatusMessage = $"{TotalCount} miembros encontrados";
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Error: {ex.Message}";
-        }
-        finally
-        {
-            IsLoading = false;
+            MessageBox.Show($"Error al abrir formulario: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
     /// <summary>
-    /// Abre el formulario para nuevo miembro
+    /// Abre ventana modal para editar miembro seleccionado
     /// </summary>
     [RelayCommand]
-    private void AddMember()
+    private async Task EditMemberAsync()
     {
-        OnEditMemberRequested?.Invoke(null);
-    }
-
-    /// <summary>
-    /// Abre el formulario para editar miembro
-    /// </summary>
-    [RelayCommand]
-    private void EditMember()
-    {
-        if (SelectedMember != null)
+        if (SelectedMember == null)
         {
-            OnEditMemberRequested?.Invoke(SelectedMember);
+            MessageBox.Show("Seleccione un miembro para editar", "Aviso",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        try
+        {
+            var window = new MemberFormWindow(_serviceProvider)
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+
+            await window.InitializeEditAsync(SelectedMember.MemberId);
+
+            var result = window.ShowDialog();
+
+            if (result == true && window.IsSaved)
+            {
+                // Refrescar lista
+                await LoadMembersAsync();
+                StatusMessage = "Miembro actualizado correctamente";
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error al abrir formulario: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -162,11 +179,16 @@ public partial class MembersViewModel : ObservableObject
     [RelayCommand]
     private async Task DeleteMemberAsync()
     {
-        if (SelectedMember == null) return;
+        if (SelectedMember == null)
+        {
+            MessageBox.Show("Seleccione un miembro para eliminar", "Aviso",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
 
         var result = MessageBox.Show(
-            $"¿Está seguro de eliminar a {SelectedMember.FirstName} {SelectedMember.LastName}?",
-            "Confirmar Eliminación",
+            $"Esta seguro de eliminar a {SelectedMember.FirstName} {SelectedMember.LastName}?\n\nEsta accion no se puede deshacer.",
+            "Confirmar Eliminacion",
             MessageBoxButton.YesNo,
             MessageBoxImage.Question);
 
@@ -205,10 +227,12 @@ public partial class MembersViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Refresca la lista después de guardar
+    /// Refresca la lista de miembros
     /// </summary>
-    public async Task RefreshAfterSaveAsync()
+    [RelayCommand]
+    private async Task RefreshAsync()
     {
+        SearchText = string.Empty;
         await LoadMembersAsync();
     }
 }

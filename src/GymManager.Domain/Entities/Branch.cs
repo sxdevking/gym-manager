@@ -8,51 +8,82 @@ namespace GymManager.Domain.Entities;
 public class Branch : AuditableEntity
 {
     /// <summary>
-    /// Identificador único de la sucursal
+    /// Identificador unico de la sucursal
     /// </summary>
     public Guid BranchId { get; set; }
 
     /// <summary>
-    /// Código único de la sucursal (ej: GYM-001)
+    /// ID de la licencia a la que pertenece esta sucursal
     /// </summary>
-    public string Code { get; set; } = string.Empty;
+    public Guid LicenseId { get; set; }
+
+    /// <summary>
+    /// Codigo unico de la sucursal (ej: GYM-001)
+    /// </summary>
+    public string BranchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// Nombre de la sucursal
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string BranchName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Dirección física
+    /// Direccion fisica
     /// </summary>
     public string? Address { get; set; }
 
     /// <summary>
-    /// Teléfono de contacto
+    /// Ciudad
+    /// </summary>
+    public string? City { get; set; }
+
+    /// <summary>
+    /// Estado/Provincia
+    /// </summary>
+    public string? State { get; set; }
+
+    /// <summary>
+    /// Codigo postal
+    /// </summary>
+    public string? PostalCode { get; set; }
+
+    /// <summary>
+    /// Pais
+    /// </summary>
+    public string Country { get; set; } = "Mexico";
+
+    /// <summary>
+    /// Telefono de contacto
     /// </summary>
     public string? Phone { get; set; }
 
     /// <summary>
-    /// Correo electrónico
+    /// Correo electronico
     /// </summary>
     public string? Email { get; set; }
 
     /// <summary>
-    /// Hora de apertura
+    /// Indica si es la sucursal matriz/principal
     /// </summary>
-    public TimeOnly? OpenTime { get; set; }
-
-    /// <summary>
-    /// Hora de cierre
-    /// </summary>
-    public TimeOnly? CloseTime { get; set; }
+    public bool IsHeadquarters { get; set; }
 
     // ═══════════════════════════════════════════════════════════
-    // PROPIEDADES DE NAVEGACIÓN (Relaciones con otras entidades)
+    // NOTA: opening_time y closing_time estan en BranchSettings
+    // NO en esta tabla
+    // ═══════════════════════════════════════════════════════════
+
+    // ═══════════════════════════════════════════════════════════
+    // PROPIEDADES DE NAVEGACION
     // ═══════════════════════════════════════════════════════════
 
     /// <summary>
-    /// Configuración de marca de esta sucursal
+    /// Licencia del software
+    /// </summary>
+    public virtual License License { get; set; } = null!;
+
+    /// <summary>
+    /// Configuracion de marca de esta sucursal (relacion 1:1)
+    /// Los horarios de apertura/cierre estan aqui
     /// </summary>
     public virtual BranchSettings? Settings { get; set; }
 
@@ -67,7 +98,7 @@ public class Branch : AuditableEntity
     public virtual ICollection<Member> Members { get; set; } = new List<Member>();
 
     /// <summary>
-    /// Planes de membresía de esta sucursal
+    /// Planes de membresia de esta sucursal
     /// </summary>
     public virtual ICollection<MembershipPlan> MembershipPlans { get; set; } = new List<MembershipPlan>();
 
@@ -85,4 +116,19 @@ public class Branch : AuditableEntity
     /// Horarios de clases en esta sucursal
     /// </summary>
     public virtual ICollection<ClassSchedule> ClassSchedules { get; set; } = new List<ClassSchedule>();
+
+    /// <summary>
+    /// Membresias de esta sucursal
+    /// </summary>
+    public virtual ICollection<Membership> Memberships { get; set; } = new List<Membership>();
+
+    /// <summary>
+    /// Asistencias registradas en esta sucursal
+    /// </summary>
+    public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
+
+    /// <summary>
+    /// Pagos realizados en esta sucursal
+    /// </summary>
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NpgsqlTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,18 +12,13 @@ namespace GymManager.Domain.Enums;
 /// </summary>
 public enum Gender
 {
-    /// <summary>
-    /// Masculino
-    /// </summary>
-    Male = 0,
+    [PgName("M")]
+    M = 0,
 
-    /// <summary>
-    /// Femenino
-    /// </summary>
-    Female = 1,
+    [PgName("F")]
+    F = 1,
 
-    /// <summary>
-    /// Otro / Prefiere no decir
-    /// </summary>
-    Other = 2
+    [PgName("O")]
+    O = 2
 }
+

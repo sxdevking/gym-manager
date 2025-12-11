@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NpgsqlTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,23 +12,15 @@ namespace GymManager.Domain.Enums;
 /// </summary>
 public enum SaleStatus
 {
-    /// <summary>
-    /// Venta completada
-    /// </summary>
-    Completed = 0,
+    [PgName("COMPLETED")]
+    COMPLETED = 0,
 
-    /// <summary>
-    /// Venta pendiente (ej: apartado)
-    /// </summary>
-    Pending = 1,
+    [PgName("PENDING")]
+    PENDING = 1,
 
-    /// <summary>
-    /// Venta cancelada
-    /// </summary>
-    Cancelled = 2,
+    [PgName("CANCELLED")]
+    CANCELLED = 2,
 
-    /// <summary>
-    /// Venta reembolsada
-    /// </summary>
-    Refunded = 3
+    [PgName("REFUNDED")]
+    REFUNDED = 3
 }

@@ -16,6 +16,17 @@ public class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
 
         builder.HasKey(a => a.AttendanceId);
 
+        builder.Property(a => a.AttendanceId)
+            .HasColumnName("attendance_id");
+
+        builder.Property(a => a.MemberId)
+            .HasColumnName("member_id")
+            .IsRequired();
+
+        builder.Property(a => a.BranchId)
+            .HasColumnName("branch_id")
+            .IsRequired();
+
         // C#: CheckInTime -> SQL: check_in_at
         builder.Property(a => a.CheckInTime)
             .HasColumnName("check_in_at")
@@ -25,17 +36,34 @@ public class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
         builder.Property(a => a.CheckOutTime)
             .HasColumnName("check_out_at");
 
-        // Enum CheckInMethod
+        // ENUM NATIVO DE POSTGRESQL - NO usar HasConversion
         builder.Property(a => a.CheckInMethod)
-            .HasConversion(
-                v => v.ToString().ToUpper(),
-                v => Enum.Parse<CheckInMethod>(v, true))
-            .HasMaxLength(20);
+            .HasColumnName("check_in_method");
 
-        builder.Property(a => a.DurationMinutes);
+        builder.Property(a => a.DurationMinutes)
+            .HasColumnName("duration_minutes");
 
         builder.Property(a => a.Notes)
+            .HasColumnName("notes")
             .HasMaxLength(255);
+
+        // Auditoria
+        builder.Property(a => a.IsActive)
+            .HasColumnName("is_active");
+
+        builder.Property(a => a.CreatedAt)
+            .HasColumnName("created_at");
+
+        builder.Property(a => a.UpdatedAt)
+            .HasColumnName("updated_at");
+
+        // Ignorar
+        builder.Ignore(a => a.DeletedBy);
+        builder.Ignore(a => a.IsDeleted);
+        builder.Ignore(a => a.DeletedAt);
+        builder.Ignore(a => a.CreatedBy);
+        builder.Ignore(a => a.UpdatedBy);
+        builder.Ignore(a => a.IsCurrentlyInGym);
 
         // Indices
         builder.HasIndex(a => a.MemberId);
@@ -50,16 +78,9 @@ public class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(a => a.Branch)
-            .WithMany()
+            .WithMany(b => b.Attendances)
             .HasForeignKey(a => a.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        // Ignorar propiedades de auditoria y calculadas
-        builder.Ignore(a => a.DeletedBy);
-        builder.Ignore(a => a.IsDeleted);
-        builder.Ignore(a => a.IsCurrentlyInGym);
-
-        // Filtro soft delete
-        builder.HasQueryFilter(a => a.DeletedAt == null);
     }
 }
+

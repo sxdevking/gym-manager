@@ -66,7 +66,7 @@ public class Sale : AuditableEntity
     /// <summary>
     /// Estado de la venta
     /// </summary>
-    public SaleStatus Status { get; set; } = SaleStatus.Completed;
+    public SaleStatus Status { get; set; } = SaleStatus.COMPLETED;
 
     /// <summary>
     /// Referencia de pago (número de transacción, etc.)

@@ -46,7 +46,7 @@ public class Payment : AuditableEntity
     /// <summary>
     /// Estado del pago
     /// </summary>
-    public PaymentStatus Status { get; set; } = PaymentStatus.Completed;
+    public PaymentStatus Status { get; set; } = PaymentStatus.COMPLETED;
 
     /// <summary>
     /// Referencia externa (número de transacción, autorización, etc.)

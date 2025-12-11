@@ -108,14 +108,14 @@ public partial class MainViewModel : ObservableObject
             TotalMembers = await context.Members.CountAsync(m => m.IsActive && m.DeletedAt == null);
 
             ActiveMembers = await context.Memberships
-                .CountAsync(m => m.Status == MembershipStatus.Active && m.IsActive);
+                .CountAsync(m => m.Status == MembershipStatus.ACTIVE && m.IsActive);
 
             TodayAttendance = await context.Attendances
                 .CountAsync(a => a.CheckInTime.Date == DateTime.UtcNow.Date);
 
             var nextWeek = DateTime.UtcNow.AddDays(7);
             ExpiringMemberships = await context.Memberships
-                .CountAsync(m => m.Status == MembershipStatus.Active
+                .CountAsync(m => m.Status == MembershipStatus.ACTIVE
                               && m.EndDate <= nextWeek
                               && m.EndDate >= DateTime.UtcNow);
 
@@ -126,7 +126,7 @@ public partial class MainViewModel : ObservableObject
             var firstDayOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
             MonthlyRevenue = await context.Payments
                 .Where(p => p.PaymentDate >= firstDayOfMonth
-                         && p.Status == PaymentStatus.Completed)
+                         && p.Status == PaymentStatus.COMPLETED)
                 .SumAsync(p => (decimal?)p.Amount) ?? 0;
 
             StatusMessage = $"Actualizado: {DateTime.Now:HH:mm:ss}";

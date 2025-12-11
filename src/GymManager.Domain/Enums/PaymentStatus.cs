@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NpgsqlTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,23 +12,15 @@ namespace GymManager.Domain.Enums;
 /// </summary>
 public enum PaymentStatus
 {
-    /// <summary>
-    /// Pago completado exitosamente
-    /// </summary>
-    Completed = 0,
+    [PgName("COMPLETED")]
+    COMPLETED = 0,
 
-    /// <summary>
-    /// Pago pendiente de procesar
-    /// </summary>
-    Pending = 1,
+    [PgName("PENDING")]
+    PENDING = 1,
 
-    /// <summary>
-    /// Pago reembolsado al cliente
-    /// </summary>
-    Refunded = 2,
+    [PgName("REFUNDED")]
+    REFUNDED = 2,
 
-    /// <summary>
-    /// Pago fallido o rechazado
-    /// </summary>
-    Failed = 3
+    [PgName("FAILED")]
+    FAILED = 3
 }
