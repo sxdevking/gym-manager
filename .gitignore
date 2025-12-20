@@ -111,3 +111,8 @@ coverage*.xml
 *.bak
 *.swp
 *~
+# Archivos sensibles adicionales
+*.csproj.user
+appsettings.json
+appsettings.*.json
+
