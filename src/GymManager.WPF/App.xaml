@@ -5,6 +5,11 @@
 
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Estilos Fluent Design -->
+                <ResourceDictionary Source="/Resources/FluentStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
             <!-- Convertidores globales -->
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>

@@ -3,8 +3,14 @@ using GymManager.Application.Common.Interfaces;
 using GymManager.Infrastructure;
 using GymManager.Infrastructure.Persistence;
 using GymManager.WPF.ViewModels;
+using GymManager.WPF.ViewModels.Classes;
 using GymManager.WPF.ViewModels.Licensing;
 using GymManager.WPF.ViewModels.Members;
+using GymManager.WPF.ViewModels.Memberships;
+using GymManager.WPF.ViewModels.Payments;
+using GymManager.WPF.ViewModels.Reports;
+using GymManager.WPF.ViewModels.Sales;
+using GymManager.WPF.ViewModels.Settings;
 using GymManager.WPF.Views.Licensing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,10 +41,34 @@ public partial class App : System.Windows.Application
                 // ═══════════════════════════════════════════════════════════
                 // Registrar ViewModels
                 // ═══════════════════════════════════════════════════════════
+
+                // Principal
                 services.AddSingleton<MainViewModel>();
+
+                // Licensing
                 services.AddTransient<LicenseActivationViewModel>();
+
+                // Members
                 services.AddTransient<MembersViewModel>();
                 services.AddTransient<MemberFormViewModel>();
+
+                // Memberships
+                services.AddTransient<MembershipsViewModel>();
+
+                // Payments
+                services.AddTransient<PaymentsViewModel>();
+
+                // Sales
+                services.AddTransient<SalesViewModel>();
+
+                // Classes
+                services.AddTransient<ClassesViewModel>();
+
+                // Reports
+                services.AddTransient<ReportsViewModel>();
+
+                // Settings
+                services.AddTransient<SettingsViewModel>();
 
                 // ═══════════════════════════════════════════════════════════
                 // Registrar Views
@@ -70,6 +100,24 @@ public partial class App : System.Windows.Application
                 return;
             }
 
+            // Verificar licencia
+            var licenseService = scope.ServiceProvider.GetRequiredService<ILicenseService>();
+            var validationResult = await licenseService.ValidateLicenseAsync();
+
+            // CORRECCIÓN: Usar validationResult.IsValid (es un record con propiedad IsValid)
+            if (!validationResult.IsValid)
+            {
+                // Mostrar ventana de activación
+                var activationView = _host.Services.GetRequiredService<LicenseActivationView>();
+                var result = activationView.ShowDialog();
+
+                if (result != true)
+                {
+                    Shutdown();
+                    return;
+                }
+            }
+
             // Mostrar ventana principal
             var mainWindow = _host.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
@@ -77,7 +125,7 @@ public partial class App : System.Windows.Application
         catch (Exception ex)
         {
             MessageBox.Show(
-                $"Error al iniciar la aplicación:\n\n{ex.Message}",
+                $"Error al iniciar la aplicación:\n{ex.Message}",
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);

@@ -24,6 +24,9 @@ public class LicenseService : ILicenseService
     // Clave maestra para cifrado (en producción, guardar en lugar seguro)
     private readonly string _masterKey;
 
+    // Modo desarrollo
+    private readonly bool _developmentMode;
+
     // Cache de licencia para no validar en cada operación
     private LicenseInfo? _cachedLicense;
     private DateTime _lastValidation = DateTime.MinValue;
@@ -44,15 +47,68 @@ public class LicenseService : ILicenseService
 
         _masterKey = _configuration["Licensing:MasterKey"]
             ?? throw new InvalidOperationException("Licensing:MasterKey no configurada");
+
+        // ═══════════════════════════════════════════════════════════════
+        // MODO DESARROLLO - Leer de configuración
+        // ═══════════════════════════════════════════════════════════════
+        var devModeStr = _configuration["Licensing:DevelopmentMode"];
+        _developmentMode = !string.IsNullOrEmpty(devModeStr) &&
+                          (devModeStr.Equals("true", StringComparison.OrdinalIgnoreCase) || devModeStr == "1");
+
+        if (_developmentMode)
+        {
+            _logger.LogWarning("══════════════════════════════════════════════════════════");
+            _logger.LogWarning("   🔓 LICENSE SERVICE EN MODO DESARROLLO");
+            _logger.LogWarning("   ⚠️  Licencia automática sin validación de dongle");
+            _logger.LogWarning("   📝 Para producción: DevelopmentMode = false");
+            _logger.LogWarning("══════════════════════════════════════════════════════════");
+        }
     }
 
     public bool IsDonglePresent()
     {
+        // En modo desarrollo, siempre presente
+        if (_developmentMode) return true;
+
         return _dongleService.IsDongleConnected();
     }
 
     public async Task<LicenseValidationResult> ValidateLicenseAsync()
     {
+        // ═══════════════════════════════════════════════════════════════
+        // BYPASS DESARROLLO - Licencia automática
+        // ═══════════════════════════════════════════════════════════════
+        if (_developmentMode)
+        {
+            _logger.LogDebug("Validación en modo desarrollo - Licencia automática");
+
+            // Crear licencia de desarrollo en caché
+            _cachedLicense = new LicenseInfo(
+                LicenseId: Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                LicenseKey: "DEV-MODE-LICENSE",
+                HardwareId: "DEVELOPMENT-MODE",
+                Type: LicenseType.ENTERPRISE,
+                MaxBranches: 99,
+                MaxUsers: 999,
+                IssuedAt: DateTime.UtcNow.AddYears(-1),
+                ExpiresAt: null, // Perpetua
+                IsActive: true
+            );
+            _lastValidation = DateTime.UtcNow;
+
+            return new LicenseValidationResult(
+                IsValid: true,
+                Message: "Licencia de desarrollo activa",
+                LicenseType: LicenseType.ENTERPRISE,
+                MaxBranches: 99,
+                MaxUsers: 999,
+                DaysRemaining: null
+            );
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CÓDIGO ORIGINAL DE PRODUCCIÓN
+        // ═══════════════════════════════════════════════════════════════
         try
         {
             _logger.LogInformation("Iniciando validación de licencia...");
@@ -164,6 +220,24 @@ public class LicenseService : ILicenseService
 
     public async Task<LicenseValidationResult> ActivateLicenseAsync(string licenseKey)
     {
+        // ═══════════════════════════════════════════════════════════════
+        // BYPASS DESARROLLO - Activación automática
+        // ═══════════════════════════════════════════════════════════════
+        if (_developmentMode)
+        {
+            _logger.LogWarning("Activación en modo desarrollo - Automática");
+            return new LicenseValidationResult(
+                IsValid: true,
+                Message: "Licencia de desarrollo activada automáticamente",
+                LicenseType: LicenseType.ENTERPRISE,
+                MaxBranches: 99,
+                MaxUsers: 999
+            );
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CÓDIGO ORIGINAL DE PRODUCCIÓN
+        // ═══════════════════════════════════════════════════════════════
         try
         {
             _logger.LogInformation("Iniciando activación de licencia...");

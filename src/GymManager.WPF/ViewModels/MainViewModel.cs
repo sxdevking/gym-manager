@@ -29,13 +29,6 @@ public partial class MainViewModel : ObservableObject
     private string _branchName = "Sucursal Principal";
 
     // ═══════════════════════════════════════════════════════════
-    // CONTENIDO DINÁMICO
-    // ═══════════════════════════════════════════════════════════
-
-    [ObservableProperty]
-    private object? _currentContent;
-
-    // ═══════════════════════════════════════════════════════════
     // ESTADÍSTICAS DEL DASHBOARD
     // ═══════════════════════════════════════════════════════════
 
@@ -74,7 +67,22 @@ public partial class MainViewModel : ObservableObject
     private bool _showMembers;
 
     [ObservableProperty]
-    private bool _showMemberForm;
+    private bool _showMemberships;
+
+    [ObservableProperty]
+    private bool _showPayments;
+
+    [ObservableProperty]
+    private bool _showSales;
+
+    [ObservableProperty]
+    private bool _showClasses;
+
+    [ObservableProperty]
+    private bool _showReports;
+
+    [ObservableProperty]
+    private bool _showSettings;
 
     public MainViewModel(IServiceProvider serviceProvider)
     {
@@ -88,7 +96,12 @@ public partial class MainViewModel : ObservableObject
     {
         ShowDashboard = false;
         ShowMembers = false;
-        ShowMemberForm = false;
+        ShowMemberships = false;
+        ShowPayments = false;
+        ShowSales = false;
+        ShowClasses = false;
+        ShowReports = false;
+        ShowSettings = false;
     }
 
     /// <summary>
@@ -121,7 +134,7 @@ public partial class MainViewModel : ObservableObject
 
             var todayDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
             ScheduledClasses = await context.ClassSchedules
-                .CountAsync(cs => cs.DayOfWeek == todayDayOfWeek && cs.IsAvailable && cs.IsActive);
+                .CountAsync(cs => cs.DayOfWeek == todayDayOfWeek && cs.IsAvailable);
 
             var firstDayOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
             MonthlyRevenue = await context.Payments
@@ -167,54 +180,54 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void NavigateToMemberships()
     {
+        HideAllViews();
+        ShowMemberships = true;
         CurrentView = "Memberships";
         Title = "GymManager - Membresías";
-        MessageBox.Show("Módulo de Membresías - Próximamente", "En Desarrollo",
-            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
     private void NavigateToPayments()
     {
+        HideAllViews();
+        ShowPayments = true;
         CurrentView = "Payments";
         Title = "GymManager - Pagos";
-        MessageBox.Show("Módulo de Pagos - Próximamente", "En Desarrollo",
-            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
     private void NavigateToSales()
     {
+        HideAllViews();
+        ShowSales = true;
         CurrentView = "Sales";
         Title = "GymManager - Ventas";
-        MessageBox.Show("Módulo de Ventas - Próximamente", "En Desarrollo",
-            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
     private void NavigateToClasses()
     {
+        HideAllViews();
+        ShowClasses = true;
         CurrentView = "Classes";
         Title = "GymManager - Clases";
-        MessageBox.Show("Módulo de Clases - Próximamente", "En Desarrollo",
-            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
     private void NavigateToReports()
     {
+        HideAllViews();
+        ShowReports = true;
         CurrentView = "Reports";
         Title = "GymManager - Reportes";
-        MessageBox.Show("Módulo de Reportes - Próximamente", "En Desarrollo",
-            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
     private void NavigateToSettings()
     {
+        HideAllViews();
+        ShowSettings = true;
         CurrentView = "Settings";
         Title = "GymManager - Configuración";
-        MessageBox.Show("Módulo de Configuración - Próximamente", "En Desarrollo",
-            MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }

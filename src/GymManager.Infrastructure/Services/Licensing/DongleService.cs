@@ -1,5 +1,6 @@
 ﻿using GymManager.Application.Common.Interfaces;
 using HidSharp;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace GymManager.Infrastructure.Services.Licensing;
@@ -11,10 +12,14 @@ public class DongleService : IDongleService, IDisposable
 {
     private readonly ILogger<DongleService> _logger;
     private readonly IEncryptionService _encryptionService;
+    private readonly bool _developmentMode;
 
     // Configuración del dongle (ajustar según el dispositivo real)
     private const int VendorId = 0x1234;   // ID del fabricante
     private const int ProductId = 0x5678;  // ID del producto
+
+    // Hardware ID emulado para modo desarrollo
+    private const string DevHardwareId = "DEV-MODE-GYMMANAGER-2024-HARDWARE-ID-EMULATED";
 
     private HidDevice? _currentDevice;
     private HidStream? _currentStream;
@@ -23,10 +28,30 @@ public class DongleService : IDongleService, IDisposable
 
     public event EventHandler<bool>? DongleConnectionChanged;
 
-    public DongleService(ILogger<DongleService> logger, IEncryptionService encryptionService)
+    public DongleService(
+        ILogger<DongleService> logger,
+        IEncryptionService encryptionService,
+        IConfiguration configuration)
     {
         _logger = logger;
         _encryptionService = encryptionService;
+
+        // ═══════════════════════════════════════════════════════════════
+        // MODO DESARROLLO - Leer de configuración
+        // ═══════════════════════════════════════════════════════════════
+        var devModeStr = configuration["Licensing:DevelopmentMode"];
+        _developmentMode = !string.IsNullOrEmpty(devModeStr) &&
+                          (devModeStr.Equals("true", StringComparison.OrdinalIgnoreCase) || devModeStr == "1");
+
+        if (_developmentMode)
+        {
+            _logger.LogWarning("══════════════════════════════════════════════════════════");
+            _logger.LogWarning("   🔧 DONGLE SERVICE EN MODO DESARROLLO");
+            _logger.LogWarning("   ⚠️  El dongle USB NO será requerido");
+            _logger.LogWarning("   📝 Para producción: DevelopmentMode = false");
+            _logger.LogWarning("══════════════════════════════════════════════════════════");
+            _isConnected = true;
+        }
 
         // Timer para verificar conexión periódicamente
         _connectionTimer = new System.Timers.Timer(2000);
@@ -36,6 +61,17 @@ public class DongleService : IDongleService, IDisposable
 
     public bool IsDongleConnected()
     {
+        // ═══════════════════════════════════════════════════════════════
+        // BYPASS DESARROLLO
+        // ═══════════════════════════════════════════════════════════════
+        if (_developmentMode)
+        {
+            return true;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CÓDIGO ORIGINAL DE PRODUCCIÓN
+        // ═══════════════════════════════════════════════════════════════
         try
         {
             var devices = DeviceList.Local.GetHidDevices(VendorId, ProductId);
@@ -59,6 +95,18 @@ public class DongleService : IDongleService, IDisposable
 
     public string? GetHardwareId()
     {
+        // ═══════════════════════════════════════════════════════════════
+        // BYPASS DESARROLLO
+        // ═══════════════════════════════════════════════════════════════
+        if (_developmentMode)
+        {
+            _logger.LogDebug("Retornando Hardware ID de desarrollo");
+            return _encryptionService.GenerateHash(DevHardwareId);
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CÓDIGO ORIGINAL DE PRODUCCIÓN
+        // ═══════════════════════════════════════════════════════════════
         try
         {
             var device = DeviceList.Local.GetHidDevices(VendorId, ProductId).FirstOrDefault();
@@ -86,6 +134,17 @@ public class DongleService : IDongleService, IDisposable
 
     public byte[]? ReadFromDongle()
     {
+        // ═══════════════════════════════════════════════════════════════
+        // BYPASS DESARROLLO
+        // ═══════════════════════════════════════════════════════════════
+        if (_developmentMode)
+        {
+            return null; // No hay datos que leer en modo desarrollo
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CÓDIGO ORIGINAL DE PRODUCCIÓN
+        // ═══════════════════════════════════════════════════════════════
         try
         {
             var device = DeviceList.Local.GetHidDevices(VendorId, ProductId).FirstOrDefault();
@@ -123,6 +182,18 @@ public class DongleService : IDongleService, IDisposable
 
     public bool WriteToDongle(byte[] data)
     {
+        // ═══════════════════════════════════════════════════════════════
+        // BYPASS DESARROLLO
+        // ═══════════════════════════════════════════════════════════════
+        if (_developmentMode)
+        {
+            _logger.LogDebug("Escritura simulada en modo desarrollo: {Bytes} bytes", data.Length);
+            return true;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // CÓDIGO ORIGINAL DE PRODUCCIÓN
+        // ═══════════════════════════════════════════════════════════════
         try
         {
             var device = DeviceList.Local.GetHidDevices(VendorId, ProductId).FirstOrDefault();

@@ -5,17 +5,15 @@ using System.Windows.Data;
 namespace GymManager.WPF.Converters;
 
 /// <summary>
-/// Convierte un string a Visibility (Visible si no está vacío)
+/// Convierte un string a Visibility (Visible si tiene contenido, Collapsed si está vacío)
 /// </summary>
 public class StringToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is string stringValue)
+        if (value is string str && !string.IsNullOrWhiteSpace(str))
         {
-            return string.IsNullOrWhiteSpace(stringValue)
-                ? Visibility.Collapsed
-                : Visibility.Visible;
+            return Visibility.Visible;
         }
         return Visibility.Collapsed;
     }

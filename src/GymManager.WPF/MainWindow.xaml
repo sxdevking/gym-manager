@@ -4,52 +4,48 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:GymManager.WPF.Views.Members"
+        xmlns:membershipsViews="clr-namespace:GymManager.WPF.Views.Memberships"
+        xmlns:paymentsViews="clr-namespace:GymManager.WPF.Views.Payments"
+        xmlns:salesViews="clr-namespace:GymManager.WPF.Views.Sales"
+        xmlns:classesViews="clr-namespace:GymManager.WPF.Views.Classes"
+        xmlns:reportsViews="clr-namespace:GymManager.WPF.Views.Reports"
+        xmlns:settingsViews="clr-namespace:GymManager.WPF.Views.Settings"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="720" Width="1280"
+        Height="800" Width="1400"
         MinHeight="600" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized"
         Background="#0F172A">
 
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
         <!-- Estilo para botones del menu -->
         <Style x:Key="MenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#94A3B8"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Padding" Value="24,14"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" 
-                                Background="{TemplateBinding Background}" 
-                                CornerRadius="8"
-                                Margin="8,2">
-                            <ContentPresenter HorizontalAlignment="Left" 
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"/>
+                        <Border Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="0">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#1E293B"/>
-                                <Setter Property="Foreground" Value="#F8FAFC"/>
+                                <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-
-        <!-- Estilo para tarjetas de estadisticas -->
-        <Style x:Key="StatCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="#1E293B"/>
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="20"/>
-            <Setter Property="Margin" Value="8"/>
         </Style>
     </Window.Resources>
 
@@ -59,9 +55,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ═══════════════════════════════════════════════════════════ -->
-        <!-- PANEL LATERAL (SIDEBAR) -->
-        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- SIDEBAR -->
         <Border Grid.Column="0" Background="#1E293B">
             <Grid>
                 <Grid.RowDefinitions>
@@ -70,64 +64,43 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Logo y Nombre -->
-                <StackPanel Grid.Row="0" Margin="20" HorizontalAlignment="Center">
-                    <TextBlock Text="GymManager" 
-                               FontSize="24" 
+                <!-- Logo -->
+                <StackPanel Grid.Row="0" Margin="24,24,24,16">
+                    <TextBlock Text="💪 GymManager" 
+                               FontSize="22" 
                                FontWeight="Bold" 
-                               Foreground="#F8FAFC"
-                               HorizontalAlignment="Center"/>
+                               Foreground="White"/>
                     <TextBlock Text="{Binding BranchName}" 
                                FontSize="12" 
-                               Foreground="#64748B"
-                               HorizontalAlignment="Center"
+                               Foreground="#64748B" 
                                Margin="0,4,0,0"/>
                 </StackPanel>
 
-                <!-- Menu de Navegacion -->
+                <!-- Menu -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="0,10">
+                    <StackPanel>
+                        <!-- Separador -->
+                        <TextBlock Text="PRINCIPAL" 
+                                   FontSize="11" 
+                                   Foreground="#475569" 
+                                   Margin="24,16,0,8"
+                                   FontWeight="SemiBold"/>
 
                         <!-- Dashboard -->
                         <Button Style="{StaticResource MenuButtonStyle}"
                                 Command="{Binding NavigateToDashboardCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[D]" Width="24" FontWeight="Bold" Foreground="#3B82F6"/>
+                                <TextBlock Text="📊" Width="24"/>
                                 <TextBlock Text="Dashboard" Margin="12,0,0,0"/>
                             </StackPanel>
                         </Button>
-
-                        <!-- Separador -->
-                        <TextBlock Text="GESTION" 
-                                   FontSize="11" 
-                                   Foreground="#475569" 
-                                   Margin="24,20,0,8"
-                                   FontWeight="SemiBold"/>
 
                         <!-- Miembros -->
                         <Button Style="{StaticResource MenuButtonStyle}"
                                 Command="{Binding NavigateToMembersCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[M]" Width="24" FontWeight="Bold" Foreground="#10B981"/>
+                                <TextBlock Text="👥" Width="24"/>
                                 <TextBlock Text="Miembros" Margin="12,0,0,0"/>
-                            </StackPanel>
-                        </Button>
-
-                        <!-- Membresías -->
-                        <Button Style="{StaticResource MenuButtonStyle}"
-                                Command="{Binding NavigateToMembershipsCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[B]" Width="24" FontWeight="Bold" Foreground="#8B5CF6"/>
-                                <TextBlock Text="Membresías" Margin="12,0,0,0"/>
-                            </StackPanel>
-                        </Button>
-
-                        <!-- Pagos -->
-                        <Button Style="{StaticResource MenuButtonStyle}"
-                                Command="{Binding NavigateToPaymentsCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[$]" Width="24" FontWeight="Bold" Foreground="#F59E0B"/>
-                                <TextBlock Text="Pagos" Margin="12,0,0,0"/>
                             </StackPanel>
                         </Button>
 
@@ -138,11 +111,29 @@
                                    Margin="24,20,0,8"
                                    FontWeight="SemiBold"/>
 
+                        <!-- Membresias -->
+                        <Button Style="{StaticResource MenuButtonStyle}"
+                                Command="{Binding NavigateToMembershipsCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💳" Width="24"/>
+                                <TextBlock Text="Membresias" Margin="12,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Pagos -->
+                        <Button Style="{StaticResource MenuButtonStyle}"
+                                Command="{Binding NavigateToPaymentsCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💰" Width="24"/>
+                                <TextBlock Text="Pagos" Margin="12,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+
                         <!-- Ventas -->
                         <Button Style="{StaticResource MenuButtonStyle}"
                                 Command="{Binding NavigateToSalesCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[V]" Width="24" FontWeight="Bold" Foreground="#EC4899"/>
+                                <TextBlock Text="🛒" Width="24"/>
                                 <TextBlock Text="Ventas" Margin="12,0,0,0"/>
                             </StackPanel>
                         </Button>
@@ -151,7 +142,7 @@
                         <Button Style="{StaticResource MenuButtonStyle}"
                                 Command="{Binding NavigateToClassesCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[C]" Width="24" FontWeight="Bold" Foreground="#14B8A6"/>
+                                <TextBlock Text="🏃" Width="24"/>
                                 <TextBlock Text="Clases" Margin="12,0,0,0"/>
                             </StackPanel>
                         </Button>
@@ -167,7 +158,7 @@
                         <Button Style="{StaticResource MenuButtonStyle}"
                                 Command="{Binding NavigateToReportsCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[R]" Width="24" FontWeight="Bold" Foreground="#F97316"/>
+                                <TextBlock Text="📈" Width="24"/>
                                 <TextBlock Text="Reportes" Margin="12,0,0,0"/>
                             </StackPanel>
                         </Button>
@@ -176,186 +167,167 @@
                         <Button Style="{StaticResource MenuButtonStyle}"
                                 Command="{Binding NavigateToSettingsCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="[S]" Width="24" FontWeight="Bold" Foreground="#64748B"/>
+                                <TextBlock Text="⚙️" Width="24"/>
                                 <TextBlock Text="Configuracion" Margin="12,0,0,0"/>
                             </StackPanel>
                         </Button>
-
                     </StackPanel>
                 </ScrollViewer>
 
-                <!-- Usuario y Version -->
-                <Border Grid.Row="2" Background="#0F172A" Padding="16" Margin="8">
-                    <StackPanel>
-                        <TextBlock Text="{Binding UserName}" 
-                                   Foreground="#F8FAFC" 
-                                   FontWeight="SemiBold"
-                                   FontSize="13"/>
-                        <TextBlock Text="Administrador" 
-                                   Foreground="#64748B" 
-                                   FontSize="11"
-                                   Margin="0,2,0,0"/>
+                <!-- Usuario -->
+                <Border Grid.Row="2" Background="#15FFFFFF" Padding="16">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="40" Height="40" CornerRadius="20" Background="#3B82F6">
+                            <TextBlock Text="A" 
+                                       Foreground="White" 
+                                       FontWeight="Bold" 
+                                       FontSize="18"
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding UserName}" 
+                                       Foreground="White" 
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="Administrador" 
+                                       Foreground="#64748B" 
+                                       FontSize="11"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </Grid>
         </Border>
 
-        <!-- ═══════════════════════════════════════════════════════════ -->
-        <!-- AREA DE CONTENIDO PRINCIPAL -->
-        <!-- ═══════════════════════════════════════════════════════════ -->
-        <Grid Grid.Column="1" Margin="24">
+        <!-- CONTENIDO PRINCIPAL -->
+        <Grid Grid.Column="1" Background="#0F172A">
 
-            <!-- ═══════════════════════════════════════════════════════════ -->
             <!-- DASHBOARD -->
-            <!-- ═══════════════════════════════════════════════════════════ -->
-            <Grid Visibility="{Binding ShowDashboard, Converter={StaticResource BoolToVisibilityConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <ScrollViewer Visibility="{Binding ShowDashboard, Converter={StaticResource BoolToVisibilityConverter}}"
+                          VerticalScrollBarVisibility="Auto" Padding="32">
+                <StackPanel>
+                    <!-- Header -->
+                    <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,8"/>
+                    <TextBlock Text="Resumen general del gimnasio" Foreground="#64748B" FontSize="14" Margin="0,0,0,24"/>
 
-                <!-- Header -->
-                <StackPanel Grid.Row="0" Margin="0,0,0,24">
-                    <TextBlock Text="Dashboard" 
-                               FontSize="28" 
-                               FontWeight="Bold" 
-                               Foreground="#F8FAFC"/>
-                    <TextBlock Text="Resumen general del gimnasio" 
-                               FontSize="14" 
-                               Foreground="#64748B"
-                               Margin="0,4,0,0"/>
+                    <!-- Stats Cards -->
+                    <WrapPanel>
+                        <!-- Total Miembros -->
+                        <Border Background="#1E293B" CornerRadius="12" Padding="20" Margin="0,0,16,16" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="👥" FontSize="28"/>
+                                <TextBlock Text="{Binding TotalMembers}" FontSize="32" FontWeight="Bold" Foreground="#3B82F6" Margin="0,8,0,0"/>
+                                <TextBlock Text="Total Miembros" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Membresias Activas -->
+                        <Border Background="#1E293B" CornerRadius="12" Padding="20" Margin="0,0,16,16" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="✅" FontSize="28"/>
+                                <TextBlock Text="{Binding ActiveMembers}" FontSize="32" FontWeight="Bold" Foreground="#10B981" Margin="0,8,0,0"/>
+                                <TextBlock Text="Membresias Activas" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Asistencia Hoy -->
+                        <Border Background="#1E293B" CornerRadius="12" Padding="20" Margin="0,0,16,16" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="🚪" FontSize="28"/>
+                                <TextBlock Text="{Binding TodayAttendance}" FontSize="32" FontWeight="Bold" Foreground="#F59E0B" Margin="0,8,0,0"/>
+                                <TextBlock Text="Asistencia Hoy" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Ingresos del Mes -->
+                        <Border Background="#1E293B" CornerRadius="12" Padding="20" Margin="0,0,16,16" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="💰" FontSize="28"/>
+                                <TextBlock Text="{Binding MonthlyRevenue, StringFormat='${0:N0}'}" FontSize="32" FontWeight="Bold" Foreground="#8B5CF6" Margin="0,8,0,0"/>
+                                <TextBlock Text="Ingresos del Mes" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Por Vencer -->
+                        <Border Background="#1E293B" CornerRadius="12" Padding="20" Margin="0,0,16,16" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="⚠️" FontSize="28"/>
+                                <TextBlock Text="{Binding ExpiringMemberships}" FontSize="32" FontWeight="Bold" Foreground="#EF4444" Margin="0,8,0,0"/>
+                                <TextBlock Text="Por Vencer (7 dias)" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Clases Programadas -->
+                        <Border Background="#1E293B" CornerRadius="12" Padding="20" Margin="0,0,16,16" Width="200">
+                            <StackPanel>
+                                <TextBlock Text="🏃" FontSize="28"/>
+                                <TextBlock Text="{Binding ScheduledClasses}" FontSize="32" FontWeight="Bold" Foreground="#06B6D4" Margin="0,8,0,0"/>
+                                <TextBlock Text="Clases Hoy" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </WrapPanel>
+
+                    <!-- Boton Actualizar -->
+                    <Button Content="🔄 Actualizar Estadisticas"
+                            Command="{Binding LoadDashboardCommand}"
+                            HorizontalAlignment="Left"
+                            Margin="0,16,0,0"
+                            Padding="20,12"
+                            Background="#3B82F6"
+                            Foreground="White"
+                            BorderThickness="0"
+                            Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                        CornerRadius="8"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <!-- Status Bar -->
+                    <Border Background="#1E293B" CornerRadius="8" Padding="16,10" Margin="0,24,0,0">
+                        <Grid>
+                            <TextBlock Text="{Binding StatusMessage}" Foreground="#64748B" FontSize="12" HorizontalAlignment="Left"/>
+                            <TextBlock Foreground="#64748B" FontSize="12" HorizontalAlignment="Right">
+                                <Run Text="Version 1.0"/>
+                                <Run Text=" | "/>
+                                <Run Text="PostgreSQL Conectado"/>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
                 </StackPanel>
+            </ScrollViewer>
 
-                <!-- Contenido del Dashboard -->
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-
-                        <!-- Fila de Estadisticas -->
-                        <TextBlock Text="Estadisticas de Hoy" 
-                                   FontSize="16" 
-                                   FontWeight="SemiBold" 
-                                   Foreground="#94A3B8"
-                                   Margin="8,0,0,12"/>
-
-                        <WrapPanel>
-                            <!-- Tarjeta: Total Miembros -->
-                            <Border Style="{StaticResource StatCardStyle}" Width="240">
-                                <StackPanel>
-                                    <TextBlock Text="Total Miembros" Foreground="#94A3B8" FontSize="13"/>
-                                    <TextBlock Text="{Binding TotalMembers}" Foreground="#F8FAFC" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
-                                    <TextBlock Text="registrados en el sistema" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Tarjeta: Miembros Activos -->
-                            <Border Style="{StaticResource StatCardStyle}" Width="240">
-                                <StackPanel>
-                                    <TextBlock Text="Miembros Activos" Foreground="#94A3B8" FontSize="13"/>
-                                    <TextBlock Text="{Binding ActiveMembers}" Foreground="#10B981" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
-                                    <TextBlock Text="con membresia vigente" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Tarjeta: Asistencia Hoy -->
-                            <Border Style="{StaticResource StatCardStyle}" Width="240">
-                                <StackPanel>
-                                    <TextBlock Text="Asistencia Hoy" Foreground="#94A3B8" FontSize="13"/>
-                                    <TextBlock Text="{Binding TodayAttendance}" Foreground="#3B82F6" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
-                                    <TextBlock Text="check-ins registrados" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Tarjeta: Ingresos del Mes -->
-                            <Border Style="{StaticResource StatCardStyle}" Width="240">
-                                <StackPanel>
-                                    <TextBlock Text="Ingresos del Mes" Foreground="#94A3B8" FontSize="13"/>
-                                    <TextBlock Foreground="#F59E0B" FontSize="36" FontWeight="Bold" Margin="0,8,0,0">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="${0:N0}">
-                                                <Binding Path="MonthlyRevenue"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                    <TextBlock Text="recaudados este mes" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
-                                </StackPanel>
-                            </Border>
-                        </WrapPanel>
-
-                        <!-- Segunda Fila -->
-                        <TextBlock Text="Alertas y Pendientes" 
-                                   FontSize="16" 
-                                   FontWeight="SemiBold" 
-                                   Foreground="#94A3B8"
-                                   Margin="8,24,0,12"/>
-
-                        <WrapPanel>
-                            <!-- Tarjeta: Membresias por Vencer -->
-                            <Border Style="{StaticResource StatCardStyle}" Width="240">
-                                <StackPanel>
-                                    <TextBlock Text="Por Vencer (7 dias)" Foreground="#94A3B8" FontSize="13"/>
-                                    <TextBlock Text="{Binding ExpiringMemberships}" Foreground="#EF4444" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
-                                    <TextBlock Text="membresias proximas a expirar" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Tarjeta: Clases Hoy -->
-                            <Border Style="{StaticResource StatCardStyle}" Width="240">
-                                <StackPanel>
-                                    <TextBlock Text="Clases Hoy" Foreground="#94A3B8" FontSize="13"/>
-                                    <TextBlock Text="{Binding ScheduledClasses}" Foreground="#8B5CF6" FontSize="36" FontWeight="Bold" Margin="0,8,0,0"/>
-                                    <TextBlock Text="clases programadas" Foreground="#64748B" FontSize="12" Margin="0,4,0,0"/>
-                                </StackPanel>
-                            </Border>
-                        </WrapPanel>
-
-                        <!-- Boton Actualizar -->
-                        <Button Content="Actualizar Estadisticas"
-                                Command="{Binding LoadDashboardCommand}"
-                                HorizontalAlignment="Left"
-                                Margin="8,24,0,0"
-                                Padding="20,12"
-                                Background="#3B82F6"
-                                Foreground="White"
-                                BorderThickness="0"
-                                Cursor="Hand">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" 
-                                            CornerRadius="8"
-                                            Padding="{TemplateBinding Padding}">
-                                        <ContentPresenter HorizontalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </StackPanel>
-                </ScrollViewer>
-
-                <!-- Status Bar -->
-                <Border Grid.Row="2" Background="#1E293B" CornerRadius="8" Padding="16,10" Margin="0,16,0,0">
-                    <Grid>
-                        <TextBlock Text="{Binding StatusMessage}" Foreground="#64748B" FontSize="12" HorizontalAlignment="Left"/>
-                        <TextBlock Foreground="#64748B" FontSize="12" HorizontalAlignment="Right">
-                            <Run Text="Version 1.0"/>
-                            <Run Text=" | "/>
-                            <Run Text="PostgreSQL Conectado"/>
-                        </TextBlock>
-                    </Grid>
-                </Border>
-            </Grid>
-
-            <!-- ═══════════════════════════════════════════════════════════ -->
-            <!-- LISTA DE MIEMBROS -->
-            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- MIEMBROS -->
             <views:MembersView x:Name="MembersViewControl"
-                               Visibility="{Binding ShowMembers, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                               Visibility="{Binding DataContext.ShowMembers, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-            <!-- ═══════════════════════════════════════════════════════════ -->
-            <!-- FORMULARIO DE MIEMBRO (NUEVO) -->
-            <!-- ═══════════════════════════════════════════════════════════ -->
-            <views:MemberFormView x:Name="MemberFormViewControl"
-                                  Visibility="{Binding ShowMemberForm, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <!-- MEMBRESIAS -->
+            <membershipsViews:MembershipsView x:Name="MembershipsViewControl"
+                               Visibility="{Binding DataContext.ShowMemberships, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- PAGOS -->
+            <paymentsViews:PaymentsView x:Name="PaymentsViewControl"
+                               Visibility="{Binding DataContext.ShowPayments, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- VENTAS -->
+            <salesViews:SalesView x:Name="SalesViewControl"
+                               Visibility="{Binding DataContext.ShowSales, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- CLASES -->
+            <classesViews:ClassesView x:Name="ClassesViewControl"
+                               Visibility="{Binding DataContext.ShowClasses, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- REPORTES -->
+            <reportsViews:ReportsView x:Name="ReportsViewControl"
+                               Visibility="{Binding DataContext.ShowReports, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- CONFIGURACION -->
+            <settingsViews:SettingsView x:Name="SettingsViewControl"
+                               Visibility="{Binding DataContext.ShowSettings, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
         </Grid>
     </Grid>

@@ -3,248 +3,744 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:behaviors="clr-namespace:GymManager.WPF.Behaviors"
+        xmlns:converters="clr-namespace:GymManager.WPF.Converters"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="650" Width="500"
+        Height="800" Width="780"
+        MinHeight="650" MinWidth="650"
         WindowStartupLocation="CenterOwner"
-        WindowStyle="ToolWindow"
-        ResizeMode="NoResize"
-        Background="#1E293B">
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
-        <!-- Estilo para TextBox -->
-        <Style x:Key="FormTextBox" TargetType="TextBox">
-            <Setter Property="Background" Value="#334155"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#475569"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="6">
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/FluentStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <!-- Estilo para Labels -->
-        <Style x:Key="FormLabel" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#94A3B8"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Margin" Value="0,0,0,4"/>
-        </Style>
-
-        <!-- Estilo para Botones -->
-        <Style x:Key="FormButton" TargetType="Button">
-            <Setter Property="Padding" Value="20,10"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="6"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+            <converters:NullToVisibilityConverter x:Key="NullToVisibility"/>
+            <converters:InverseNullToVisibilityConverter x:Key="InverseNullToVisibility"/>
+        </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         FONDO ACRILICO PRINCIPAL
+         ═══════════════════════════════════════════════════════════════════════════ -->
+    <Border CornerRadius="12" ClipToBounds="True">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#E8102040" Offset="0"/>
+                <GradientStop Color="#E8081428" Offset="0.5"/>
+                <GradientStop Color="#E8050D18" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
 
-        <!-- HEADER -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="{Binding Title}" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Foreground="White"/>
-            <TextBlock Text="Complete la informacion del miembro" 
-                       FontSize="12" 
-                       Foreground="#64748B"
-                       Margin="0,4,0,0"/>
-        </StackPanel>
+        <!-- Efecto de blur/glass -->
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="30" ShadowDepth="0" Color="Black" Opacity="0.5"/>
+        </Border.Effect>
 
-        <!-- FORMULARIO -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <!-- Codigo de Miembro (Solo lectura) -->
-                <StackPanel Margin="0,0,0,12">
-                    <TextBlock Text="Codigo de Miembro" Style="{StaticResource FormLabel}"/>
-                    <TextBox Text="{Binding MemberCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             Style="{StaticResource FormTextBox}"
-                             IsReadOnly="True"
-                             Background="#1E293B"/>
-                </StackPanel>
+        <Grid>
+            <!-- Patron de fondo sutil -->
+            <Border Opacity="0.03">
+                <Border.Background>
+                    <DrawingBrush TileMode="Tile" Viewport="0,0,20,20" ViewportUnits="Absolute">
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing Brush="White">
+                                <GeometryDrawing.Geometry>
+                                    <EllipseGeometry Center="10,10" RadiusX="1" RadiusY="1"/>
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Border.Background>
+            </Border>
 
-                <!-- Nombre y Apellido en fila -->
-                <Grid Margin="0,0,0,12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Nombre *" Style="{StaticResource FormLabel}"/>
-                        <TextBox Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 Style="{StaticResource FormTextBox}"/>
+                <!-- ═══════════════════════════════════════════════════════════════════
+                     HEADER CON EFECTO GLASS
+                     ═══════════════════════════════════════════════════════════════════ -->
+                <Border Grid.Row="0" 
+                        Background="#15FFFFFF" 
+                        Padding="28,24"
+                        CornerRadius="12,12,0,0">
+
+                    <!-- Linea decorativa superior -->
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" Direction="270" Color="Black" Opacity="0.2"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="{Binding Title}" 
+                                       Style="{StaticResource FluentTitle}"/>
+                            <TextBlock Text="Complete la informacion del miembro en las diferentes secciones" 
+                                       Style="{StaticResource FluentSubtitle}"
+                                       Margin="0,6,0,0"/>
+                        </StackPanel>
+
+                        <!-- Foto + Codigo -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <!-- Preview de Foto -->
+                            <Border Width="70" Height="70"
+                                    CornerRadius="35"
+                                    BorderThickness="3"
+                                    Margin="0,0,16,0"
+                                    Visibility="{Binding PhotoPreview, Converter={StaticResource NullToVisibility}}">
+                                <Border.BorderBrush>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#60A5FA" Offset="0"/>
+                                        <GradientStop Color="#A78BFA" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.BorderBrush>
+                                <Border CornerRadius="32" ClipToBounds="True">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{Binding PhotoPreview}" Stretch="UniformToFill"/>
+                                    </Border.Background>
+                                </Border>
+                            </Border>
+
+                            <!-- Placeholder -->
+                            <Border Width="70" Height="70"
+                                    CornerRadius="35"
+                                    Background="#25FFFFFF"
+                                    BorderBrush="#40FFFFFF"
+                                    BorderThickness="2"
+                                    Margin="0,0,16,0"
+                                    Visibility="{Binding PhotoPreview, Converter={StaticResource InverseNullToVisibility}}">
+                                <TextBlock Text="👤" 
+                                           FontSize="32"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Badge del Codigo -->
+                            <Border VerticalAlignment="Center"
+                                    CornerRadius="8"
+                                    Padding="16,10">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#3B82F6" Offset="0"/>
+                                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <TextBlock Text="{Binding MemberCode}" 
+                                           Foreground="White"
+                                           FontWeight="Bold"
+                                           FontSize="14"/>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Botones de Ventana -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Top">
+                            <Button x:Name="MinimizeButton" 
+                                    Content="─" 
+                                    Click="MinimizeButton_Click"
+                                    Width="36" Height="36"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Foreground="#80FFFFFF"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Cursor="Hand"/>
+                            <Button x:Name="CloseButton" 
+                                    Content="✕" 
+                                    Click="CloseButton_Click"
+                                    Width="36" Height="36"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Foreground="#80FFFFFF"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Cursor="Hand"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ═══════════════════════════════════════════════════════════════════
+                     CONTENIDO CON TABS
+                     ═══════════════════════════════════════════════════════════════════ -->
+                <TabControl Grid.Row="1" 
+                            Style="{StaticResource FluentTabControl}"
+                            SelectedIndex="{Binding SelectedTabIndex}"
+                            Margin="28,20,28,0">
+
+                    <TabControl.Resources>
+                        <Style TargetType="TabItem" BasedOn="{StaticResource FluentTabItem}"/>
+                    </TabControl.Resources>
+
+                    <!-- ════════════════════════════════════════════════════════════════
+                         TAB 1: INFORMACION BASICA
+                         ════════════════════════════════════════════════════════════════ -->
+                    <TabItem Header="📝 Basico">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,24,0,0">
+                            <StackPanel>
+                                <!-- Card: Nombre y Apellido -->
+                                <Border Style="{StaticResource FluentCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="🪪 Datos de Identificacion" 
+                                                   Style="{StaticResource FluentSectionHeader}"/>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="Nombre *" Style="{StaticResource FluentLabel}"/>
+                                                <TextBox Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource FluentTextBox}"
+                                                         behaviors:TextCleanupBehavior.IsEnabled="True"/>
+                                                <TextBlock Text="{Binding FirstNameErrorMessage}" 
+                                                           Foreground="#F87171" 
+                                                           FontSize="11" 
+                                                           Margin="4,4,0,0"
+                                                           Visibility="{Binding HasFirstNameError, Converter={StaticResource BoolToVisibility}}"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="Apellido *" Style="{StaticResource FluentLabel}"/>
+                                                <TextBox Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource FluentTextBox}"
+                                                         behaviors:TextCleanupBehavior.IsEnabled="True"/>
+                                                <TextBlock Text="{Binding LastNameErrorMessage}" 
+                                                           Foreground="#F87171" 
+                                                           FontSize="11" 
+                                                           Margin="4,4,0,0"
+                                                           Visibility="{Binding HasLastNameError, Converter={StaticResource BoolToVisibility}}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Card: Contacto -->
+                                <Border Style="{StaticResource FluentCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="📧 Informacion de Contacto" 
+                                                   Style="{StaticResource FluentSectionHeader}"/>
+
+                                        <!-- Email -->
+                                        <StackPanel Margin="0,0,0,16">
+                                            <TextBlock Text="Correo Electronico" Style="{StaticResource FluentLabel}"/>
+                                            <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                     Style="{StaticResource FluentTextBox}"/>
+                                            <TextBlock Text="{Binding EmailErrorMessage}" 
+                                                       Foreground="#F87171" 
+                                                       FontSize="11" 
+                                                       Margin="4,4,0,0"
+                                                       Visibility="{Binding HasEmailError, Converter={StaticResource BoolToVisibility}}"/>
+                                        </StackPanel>
+
+                                        <!-- Telefonos -->
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="Telefono Fijo" Style="{StaticResource FluentLabel}"/>
+                                                <TextBox Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource FluentTextBox}"
+                                                         behaviors:PhoneNumberBehavior.IsEnabled="True"
+                                                         MaxLength="15"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="Telefono Celular" Style="{StaticResource FluentLabel}"/>
+                                                <TextBox Text="{Binding MobilePhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource FluentTextBox}"
+                                                         behaviors:PhoneNumberBehavior.IsEnabled="True"
+                                                         MaxLength="15"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Error Message -->
+                                <Border Style="{StaticResource FluentErrorBorder}"
+                                        Margin="0,8,0,0"
+                                        Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="⚠️" FontSize="16" Margin="0,0,10,0"/>
+                                        <TextBlock Text="{Binding ErrorMessage}" 
+                                                   Foreground="#F87171" 
+                                                   FontSize="13"
+                                                   TextWrapping="Wrap"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <!-- ════════════════════════════════════════════════════════════════
+                         TAB 2: DATOS PERSONALES
+                         ════════════════════════════════════════════════════════════════ -->
+                    <TabItem Header="👤 Personal">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,24,0,0">
+                            <StackPanel>
+                                <Border Style="{StaticResource FluentCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="📅 Datos Personales" 
+                                                   Style="{StaticResource FluentSectionHeader}"/>
+
+                                        <Grid Margin="0,0,0,16">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="Fecha de Nacimiento" Style="{StaticResource FluentLabel}"/>
+                                                <DatePicker SelectedDate="{Binding BirthDate, Mode=TwoWay}"
+                                                            Style="{StaticResource FluentDatePicker}"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="Genero" Style="{StaticResource FluentLabel}"/>
+                                                <ComboBox ItemsSource="{Binding Genders}"
+                                                          SelectedItem="{Binding SelectedGender, Mode=TwoWay}"
+                                                          Style="{StaticResource FluentComboBox}"/>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="Tipo de Documento" Style="{StaticResource FluentLabel}"/>
+                                                <ComboBox ItemsSource="{Binding DocumentTypes}"
+                                                          SelectedItem="{Binding IdDocumentType, Mode=TwoWay}"
+                                                          IsEditable="True"
+                                                          Style="{StaticResource FluentComboBox}"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="Numero de Documento" Style="{StaticResource FluentLabel}"/>
+                                                <TextBox Text="{Binding IdDocumentNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                         Style="{StaticResource FluentTextBox}"
+                                                         behaviors:NumericOnlyBehavior.IsEnabled="True"
+                                                         MaxLength="20"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Foto -->
+                                <Border Style="{StaticResource FluentCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="📷 Foto del Miembro" 
+                                                   Style="{StaticResource FluentSectionHeader}"/>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBox Grid.Column="0"
+                                                     Text="{Binding PhotoPath, Mode=TwoWay}" 
+                                                     Style="{StaticResource FluentTextBox}"
+                                                     IsReadOnly="True"/>
+
+                                            <Button Grid.Column="1"
+                                                    Content="📷 Seleccionar"
+                                                    Command="{Binding SelectPhotoCommand}"
+                                                    Style="{StaticResource FluentButtonPrimary}"
+                                                    Margin="10,0,0,0"/>
+
+                                            <Button Grid.Column="2"
+                                                    Content="✕"
+                                                    Command="{Binding ClearPhotoCommand}"
+                                                    Style="{StaticResource FluentButtonDanger}"
+                                                    Padding="14,12"
+                                                    Margin="6,0,0,0"
+                                                    ToolTip="Quitar foto"/>
+                                        </Grid>
+
+                                        <!-- Preview -->
+                                        <Border Margin="0,16,0,0"
+                                                MaxWidth="180"
+                                                MaxHeight="180"
+                                                HorizontalAlignment="Left"
+                                                CornerRadius="12"
+                                                BorderThickness="2"
+                                                Visibility="{Binding PhotoPreview, Converter={StaticResource NullToVisibility}}">
+                                            <Border.BorderBrush>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#60A5FA" Offset="0"/>
+                                                    <GradientStop Color="#A78BFA" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.BorderBrush>
+                                            <Border CornerRadius="10" ClipToBounds="True">
+                                                <Image Source="{Binding PhotoPreview}" Stretch="Uniform"/>
+                                            </Border>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <!-- ════════════════════════════════════════════════════════════════
+                         TAB 3: DIRECCION
+                         ════════════════════════════════════════════════════════════════ -->
+                    <TabItem Header="🏠 Direccion">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,24,0,0">
+                            <Border Style="{StaticResource FluentCard}">
+                                <StackPanel>
+                                    <TextBlock Text="📍 Domicilio" 
+                                               Style="{StaticResource FluentSectionHeader}"/>
+
+                                    <StackPanel Margin="0,0,0,16">
+                                        <TextBlock Text="Direccion (Calle y Numero)" Style="{StaticResource FluentLabel}"/>
+                                        <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Style="{StaticResource FluentTextBox}"
+                                                 behaviors:TextCleanupBehavior.IsEnabled="True"/>
+                                    </StackPanel>
+
+                                    <!-- Estado primero, luego Ciudad -->
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="20"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="Estado" Style="{StaticResource FluentLabel}"/>
+                                            <ComboBox ItemsSource="{Binding MexicanStates}"
+                                                      SelectedItem="{Binding State, Mode=TwoWay}"
+                                                      Style="{StaticResource FluentComboBoxSearchable}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="Ciudad" Style="{StaticResource FluentLabel}"/>
+                                            <ComboBox ItemsSource="{Binding AvailableCities}"
+                                                      SelectedItem="{Binding City, Mode=TwoWay}"
+                                                      Style="{StaticResource FluentComboBoxSearchable}"
+                                                      IsEnabled="{Binding AvailableCities.Count}"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <StackPanel MaxWidth="200" HorizontalAlignment="Left">
+                                        <TextBlock Text="Codigo Postal" Style="{StaticResource FluentLabel}"/>
+                                        <TextBox Text="{Binding PostalCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Style="{StaticResource FluentTextBox}"
+                                                 behaviors:NumericOnlyBehavior.IsEnabled="True"
+                                                 MaxLength="5"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <!-- ════════════════════════════════════════════════════════════════
+                         TAB 4: EMERGENCIA
+                         ════════════════════════════════════════════════════════════════ -->
+                    <TabItem Header="🚨 Emergencia">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,24,0,0">
+                            <Border Style="{StaticResource FluentCard}">
+                                <StackPanel>
+                                    <TextBlock Text="🆘 Contacto de Emergencia" 
+                                               Style="{StaticResource FluentSectionHeader}"/>
+
+                                    <StackPanel Margin="0,0,0,16">
+                                        <TextBlock Text="Nombre Completo del Contacto" Style="{StaticResource FluentLabel}"/>
+                                        <TextBox Text="{Binding EmergencyContactName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Style="{StaticResource FluentTextBox}"
+                                                 behaviors:TextCleanupBehavior.IsEnabled="True"/>
+                                    </StackPanel>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="20"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="Telefono de Emergencia" Style="{StaticResource FluentLabel}"/>
+                                            <TextBox Text="{Binding EmergencyContactPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                     Style="{StaticResource FluentTextBox}"
+                                                     behaviors:PhoneNumberBehavior.IsEnabled="True"
+                                                     MaxLength="15"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="Relacion con el Miembro" Style="{StaticResource FluentLabel}"/>
+                                            <ComboBox ItemsSource="{Binding Relationships}"
+                                                      SelectedItem="{Binding EmergencyContactRelationship, Mode=TwoWay}"
+                                                      IsEditable="True"
+                                                      Style="{StaticResource FluentComboBox}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <!-- ════════════════════════════════════════════════════════════════
+                         TAB 5: ADICIONAL
+                         ════════════════════════════════════════════════════════════════ -->
+                    <TabItem Header="📋 Adicional">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,24,0,0">
+                            <StackPanel>
+                                <Border Style="{StaticResource FluentCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="🏥 Informacion Medica" 
+                                                   Style="{StaticResource FluentSectionHeader}"/>
+
+                                        <TextBlock Text="Notas Medicas (Alergias, Condiciones, etc.)" Style="{StaticResource FluentLabel}"/>
+                                        <TextBox Text="{Binding MedicalNotes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Style="{StaticResource FluentTextBox}"
+                                                 TextWrapping="Wrap"
+                                                 AcceptsReturn="True"
+                                                 Height="90"
+                                                 VerticalContentAlignment="Top"
+                                                 Padding="14,12"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{StaticResource FluentCard}">
+                                    <StackPanel>
+                                        <TextBlock Text="📝 Notas y Referencias" 
+                                                   Style="{StaticResource FluentSectionHeader}"/>
+
+                                        <StackPanel Margin="0,0,0,16">
+                                            <TextBlock Text="Notas Generales" Style="{StaticResource FluentLabel}"/>
+                                            <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                     Style="{StaticResource FluentTextBox}"
+                                                     TextWrapping="Wrap"
+                                                     AcceptsReturn="True"
+                                                     Height="90"
+                                                     VerticalContentAlignment="Top"
+                                                     Padding="14,12"/>
+                                        </StackPanel>
+
+                                        <!-- Referido por - Con busqueda y boton de limpiar -->
+                                        <StackPanel Margin="0,0,0,16">
+                                            <TextBlock Text="Referido por (Miembro Existente)" Style="{StaticResource FluentLabel}"/>
+
+                                            <!-- Miembro seleccionado actual -->
+                                            <Border Background="#20FFFFFF" 
+                                                    CornerRadius="8" 
+                                                    Padding="12,10"
+                                                    Margin="0,0,0,10"
+                                                    Visibility="{Binding ReferredByMemberId, Converter={StaticResource NullToVisibility}}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Text="👤 " FontSize="16" VerticalAlignment="Center"/>
+                                                    <TextBlock Grid.Column="1" 
+                                                               Text="{Binding ReferredByMemberDisplay}" 
+                                                               Foreground="#FFFFFF"
+                                                               FontWeight="Medium"
+                                                               VerticalAlignment="Center"/>
+                                                    <Button Grid.Column="2"
+                                                            Content="✕ Quitar"
+                                                            Command="{Binding ClearReferredMemberCommand}"
+                                                            Style="{StaticResource FluentButton}"
+                                                            Background="#30F87171"
+                                                            BorderBrush="#F87171"
+                                                            Padding="12,6"
+                                                            FontSize="12"/>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Buscar miembro -->
+                                            <Grid Visibility="{Binding ReferredByMemberId, Converter={StaticResource InverseNullToVisibility}}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Campo de busqueda -->
+                                                <TextBox Grid.Row="0"
+                                                         Text="{Binding MemberSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         Style="{StaticResource FluentTextBox}"
+                                                         Tag="🔍 Buscar por nombre, codigo o email..."/>
+
+                                                <!-- Lista de resultados -->
+                                                <Border Grid.Row="1" 
+                                                        Background="#1E293B"
+                                                        CornerRadius="8"
+                                                        Margin="0,8,0,0"
+                                                        MaxHeight="200"
+                                                        Visibility="{Binding AvailableMembers.Count, Converter={StaticResource BoolToVisibility}}">
+                                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                        <ItemsControl ItemsSource="{Binding AvailableMembers}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border x:Name="ItemBorder"
+                                                                            Background="Transparent"
+                                                                            Padding="14,10"
+                                                                            Cursor="Hand">
+                                                                        <Border.InputBindings>
+                                                                            <MouseBinding MouseAction="LeftClick"
+                                                                                          Command="{Binding DataContext.SelectReferredMemberCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                                          CommandParameter="{Binding}"/>
+                                                                        </Border.InputBindings>
+                                                                        <Grid>
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                            </Grid.ColumnDefinitions>
+
+                                                                            <Border Grid.Column="0" 
+                                                                                    Background="#3B82F6" 
+                                                                                    CornerRadius="4" 
+                                                                                    Padding="8,4"
+                                                                                    Margin="0,0,10,0">
+                                                                                <TextBlock Text="{Binding MemberCode}" 
+                                                                                           Foreground="White"
+                                                                                           FontSize="11"
+                                                                                           FontWeight="Bold"/>
+                                                                            </Border>
+
+                                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                                                <TextBlock Foreground="#FFFFFF" FontWeight="Medium">
+                                                                                    <Run Text="{Binding FirstName}"/>
+                                                                                    <Run Text=" "/>
+                                                                                    <Run Text="{Binding LastName}"/>
+                                                                                </TextBlock>
+                                                                                <TextBlock Text="{Binding Email}" 
+                                                                                           Foreground="#80FFFFFF"
+                                                                                           FontSize="11"
+                                                                                           Visibility="{Binding Email, Converter={StaticResource NullToVisibility}}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+
+                                                                        <Border.Style>
+                                                                            <Style TargetType="Border">
+                                                                                <Style.Triggers>
+                                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                                        <Setter Property="Background" Value="#1E40AF"/>
+                                                                                    </Trigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Border.Style>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </ScrollViewer>
+                                                </Border>
+
+                                                <!-- Mensaje si no hay resultados -->
+                                                <TextBlock Grid.Row="1"
+                                                           Text="Escribe para buscar miembros..."
+                                                           Foreground="#60FFFFFF"
+                                                           FontStyle="Italic"
+                                                           Margin="4,8,0,0"
+                                                           FontSize="12">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding AvailableMembers.Count}" Value="0">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Grid>
+                                        </StackPanel>
+
+                                        <CheckBox Content="Miembro Activo"
+                                                  IsChecked="{Binding IsActive, Mode=TwoWay}"
+                                                  Style="{StaticResource FluentCheckBox}"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+
+                <!-- ═══════════════════════════════════════════════════════════════════
+                     FOOTER
+                     ═══════════════════════════════════════════════════════════════════ -->
+                <Border Grid.Row="2" 
+                        Background="#15FFFFFF" 
+                        Padding="28,20"
+                        CornerRadius="0,0,12,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="* Campos requeridos"
+                                   Style="{StaticResource FluentSubtitle}"
+                                   VerticalAlignment="Center"/>
+
+                        <Button Grid.Column="1"
+                                Content="Cancelar"
+                                Command="{Binding CancelCommand}"
+                                Style="{StaticResource FluentButton}"
+                                MinWidth="130"/>
+
+                        <Button Grid.Column="3"
+                                Content="💾 Guardar"
+                                Command="{Binding SaveCommand}"
+                                Style="{StaticResource FluentButtonSuccess}"
+                                MinWidth="130"/>
+                    </Grid>
+                </Border>
+
+                <!-- ═══════════════════════════════════════════════════════════════════
+                     LOADING OVERLAY
+                     ═══════════════════════════════════════════════════════════════════ -->
+                <Border Grid.Row="0" Grid.RowSpan="3"
+                        Background="#DD000000"
+                        CornerRadius="12"
+                        Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}}">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Border Width="60" Height="60" CornerRadius="30" Background="#25FFFFFF">
+                            <TextBlock Text="⏳" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Guardando..." 
+                                   Foreground="White" 
+                                   FontSize="16"
+                                   FontWeight="Medium"
+                                   Margin="0,12,0,0"/>
                     </StackPanel>
-
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Apellido *" Style="{StaticResource FormLabel}"/>
-                        <TextBox Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 Style="{StaticResource FormTextBox}"/>
-                    </StackPanel>
-                </Grid>
-
-                <!-- Email -->
-                <StackPanel Margin="0,0,0,12">
-                    <TextBlock Text="Email" Style="{StaticResource FormLabel}"/>
-                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             Style="{StaticResource FormTextBox}"/>
-                </StackPanel>
-
-                <!-- Telefono y Fecha de Nacimiento -->
-                <Grid Margin="0,0,0,12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Telefono" Style="{StaticResource FormLabel}"/>
-                        <TextBox Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 Style="{StaticResource FormTextBox}"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Fecha de Nacimiento" Style="{StaticResource FormLabel}"/>
-                        <DatePicker SelectedDate="{Binding BirthDate, Mode=TwoWay}"
-                                    Background="#334155"
-                                    Foreground="White"
-                                    BorderBrush="#475569"/>
-                    </StackPanel>
-                </Grid>
-
-                <!-- Genero -->
-                <StackPanel Margin="0,0,0,12">
-                    <TextBlock Text="Genero" Style="{StaticResource FormLabel}"/>
-                    <ComboBox ItemsSource="{Binding Genders}"
-                              SelectedItem="{Binding SelectedGender, Mode=TwoWay}"
-                              Background="#334155"
-                              Foreground="White"
-                              BorderBrush="#475569"
-                              Padding="10,8">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" Foreground="Black"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-
-                <!-- Direccion -->
-                <StackPanel Margin="0,0,0,12">
-                    <TextBlock Text="Direccion" Style="{StaticResource FormLabel}"/>
-                    <TextBox Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             Style="{StaticResource FormTextBox}"/>
-                </StackPanel>
-
-                <!-- Contacto de Emergencia -->
-                <Grid Margin="0,0,0,12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Contacto de Emergencia" Style="{StaticResource FormLabel}"/>
-                        <TextBox Text="{Binding EmergencyContact, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 Style="{StaticResource FormTextBox}"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Tel. Emergencia" Style="{StaticResource FormLabel}"/>
-                        <TextBox Text="{Binding EmergencyPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 Style="{StaticResource FormTextBox}"/>
-                    </StackPanel>
-                </Grid>
-
-                <!-- Notas -->
-                <StackPanel Margin="0,0,0,12">
-                    <TextBlock Text="Notas" Style="{StaticResource FormLabel}"/>
-                    <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             Style="{StaticResource FormTextBox}"
-                             TextWrapping="Wrap"
-                             AcceptsReturn="True"
-                             Height="60"
-                             VerticalContentAlignment="Top"/>
-                </StackPanel>
-
-                <!-- Mensaje de Error -->
-                <TextBlock Text="{Binding ErrorMessage}" 
-                           Foreground="#EF4444" 
-                           FontSize="12"
-                           TextWrapping="Wrap"
-                           Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
-                           Margin="0,0,0,12"/>
-            </StackPanel>
-        </ScrollViewer>
-
-        <!-- BOTONES -->
-        <Grid Grid.Row="2" Margin="0,20,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="1"
-                    Content="Cancelar"
-                    Command="{Binding CancelCommand}"
-                    Background="#475569"
-                    Foreground="White"
-                    Style="{StaticResource FormButton}"
-                    Width="100"/>
-
-            <Button Grid.Column="3"
-                    Content="Guardar"
-                    Command="{Binding SaveCommand}"
-                    Background="#10B981"
-                    Foreground="White"
-                    Style="{StaticResource FormButton}"
-                    Width="100"/>
+                </Border>
+            </Grid>
         </Grid>
-
-        <!-- Loading Overlay -->
-        <Border Grid.Row="0" Grid.RowSpan="3"
-                Background="#80000000"
-                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Guardando..." 
-                           Foreground="White" 
-                           FontSize="16"
-                           HorizontalAlignment="Center"/>
-            </StackPanel>
-        </Border>
-    </Grid>
+    </Border>
 </Window>

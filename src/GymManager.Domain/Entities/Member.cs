@@ -4,24 +4,27 @@ using GymManager.Domain.Enums;
 namespace GymManager.Domain.Entities;
 
 /// <summary>
-/// Entidad de Miembro - Clientes del gimnasio
+/// Entidad de Miembro/Cliente del gimnasio
+/// Contiene todos los campos de la tabla gym.members
 /// </summary>
 public class Member : AuditableEntity
 {
     /// <summary>
-    /// Identificador único del miembro
+    /// Identificador unico del miembro (PK)
     /// </summary>
     public Guid MemberId { get; set; }
 
     /// <summary>
-    /// ID de la sucursal donde se registró
+    /// ID de la sucursal a la que pertenece (FK)
     /// </summary>
     public Guid BranchId { get; set; }
 
     /// <summary>
-    /// Código único del miembro (ej: MBR-00001)
+    /// Codigo unico del miembro (ej: MEM-20241211-001)
     /// </summary>
     public string MemberCode { get; set; } = string.Empty;
+
+    #region Informacion Basica
 
     /// <summary>
     /// Nombre(s) del miembro
@@ -29,19 +32,28 @@ public class Member : AuditableEntity
     public string FirstName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Apellidos del miembro
+    /// Apellido(s) del miembro
     /// </summary>
     public string LastName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Correo electrónico
+    /// Correo electronico
     /// </summary>
     public string? Email { get; set; }
 
     /// <summary>
-    /// Teléfono de contacto
+    /// Telefono fijo
     /// </summary>
     public string? Phone { get; set; }
+
+    /// <summary>
+    /// Telefono celular
+    /// </summary>
+    public string? MobilePhone { get; set; }
+
+    #endregion
+
+    #region Datos Personales
 
     /// <summary>
     /// Fecha de nacimiento
@@ -49,72 +61,120 @@ public class Member : AuditableEntity
     public DateOnly? BirthDate { get; set; }
 
     /// <summary>
-    /// Género del miembro
+    /// Genero (M, F, O)
     /// </summary>
     public Gender? Gender { get; set; }
 
     /// <summary>
-    /// Dirección del miembro
+    /// Tipo de documento de identidad (INE, Pasaporte, etc.)
+    /// </summary>
+    public string? IdDocumentType { get; set; }
+
+    /// <summary>
+    /// Numero del documento de identidad
+    /// </summary>
+    public string? IdDocumentNumber { get; set; }
+
+    /// <summary>
+    /// Ruta de la foto del miembro
+    /// </summary>
+    public string? PhotoPath { get; set; }
+
+    #endregion
+
+    #region Direccion
+
+    /// <summary>
+    /// Direccion (calle y numero)
     /// </summary>
     public string? Address { get; set; }
 
     /// <summary>
+    /// Ciudad
+    /// </summary>
+    public string? City { get; set; }
+
+    /// <summary>
+    /// Estado/Provincia
+    /// </summary>
+    public string? State { get; set; }
+
+    /// <summary>
+    /// Codigo postal
+    /// </summary>
+    public string? PostalCode { get; set; }
+
+    #endregion
+
+    #region Contacto de Emergencia
+
+    /// <summary>
     /// Nombre del contacto de emergencia
     /// </summary>
-    public string? EmergencyContact { get; set; }
+    public string? EmergencyContactName { get; set; }
 
     /// <summary>
-    /// Teléfono del contacto de emergencia
+    /// Telefono del contacto de emergencia
     /// </summary>
-    public string? EmergencyPhone { get; set; }
+    public string? EmergencyContactPhone { get; set; }
 
     /// <summary>
-    /// Foto del miembro en Base64
+    /// Relacion con el contacto de emergencia
     /// </summary>
-    public string? PhotoBase64 { get; set; }
+    public string? EmergencyContactRelationship { get; set; }
+
+    #endregion
+
+    #region Informacion Adicional
 
     /// <summary>
-    /// Código de barras o QR para acceso
+    /// Notas medicas (alergias, condiciones, etc.)
     /// </summary>
-    public string? Barcode { get; set; }
+    public string? MedicalNotes { get; set; }
 
     /// <summary>
-    /// Notas adicionales sobre el miembro
+    /// Notas generales
     /// </summary>
     public string? Notes { get; set; }
 
-    // ═══════════════════════════════════════════════════════════
-    // PROPIEDADES CALCULADAS
-    // ═══════════════════════════════════════════════════════════
-
     /// <summary>
-    /// Nombre completo del miembro
+    /// ID del miembro que lo refirio (FK nullable)
     /// </summary>
-    public string FullName => $"{FirstName} {LastName}".Trim();
-
-    // ═══════════════════════════════════════════════════════════
-    // PROPIEDADES DE NAVEGACIÓN
-    // ═══════════════════════════════════════════════════════════
+    public Guid? ReferredByMemberId { get; set; }
 
     /// <summary>
-    /// Sucursal donde está registrado
+    /// Fecha de registro/inscripcion
     /// </summary>
-    public virtual Branch Branch { get; set; } = null!;
+    public DateOnly RegistrationDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
+    #endregion
+
+    #region Propiedades de Navegacion
 
     /// <summary>
-    /// Membresías del miembro (historial)
+    /// Sucursal a la que pertenece
+    /// </summary>
+    public virtual Branch? Branch { get; set; }
+
+    /// <summary>
+    /// Miembro que lo refirio
+    /// </summary>
+    public virtual Member? ReferredByMember { get; set; }
+
+    /// <summary>
+    /// Miembros referidos por este miembro
+    /// </summary>
+    public virtual ICollection<Member> ReferredMembers { get; set; } = new List<Member>();
+
+    /// <summary>
+    /// Membresias del miembro
     /// </summary>
     public virtual ICollection<Membership> Memberships { get; set; } = new List<Membership>();
 
     /// <summary>
-    /// Registros de asistencia
+    /// Asistencias del miembro
     /// </summary>
     public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
-
-    /// <summary>
-    /// Pagos realizados
-    /// </summary>
-    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     /// <summary>
     /// Ventas realizadas al miembro
@@ -122,7 +182,82 @@ public class Member : AuditableEntity
     public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
 
     /// <summary>
+    /// Pagos realizados por el miembro
+    /// </summary>
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+    /// <summary>
     /// Inscripciones a clases
     /// </summary>
     public virtual ICollection<ClassEnrollment> ClassEnrollments { get; set; } = new List<ClassEnrollment>();
+
+    #endregion
+
+    #region Propiedades Calculadas
+
+    /// <summary>
+    /// Nombre completo del miembro
+    /// </summary>
+    public string FullName => $"{FirstName} {LastName}";
+
+    /// <summary>
+    /// Edad calculada
+    /// </summary>
+    public int? Age
+    {
+        get
+        {
+            if (!BirthDate.HasValue) return null;
+
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var age = today.Year - BirthDate.Value.Year;
+
+            if (BirthDate.Value > today.AddYears(-age))
+                age--;
+
+            return age;
+        }
+    }
+
+    #endregion
+
+    #region Propiedades Obsoletas (para compatibilidad)
+
+    /// <summary>
+    /// OBSOLETO: Usar EmergencyContactName
+    /// </summary>
+    [Obsolete("Usar EmergencyContactName en su lugar")]
+    public string? EmergencyContact
+    {
+        get => EmergencyContactName;
+        set => EmergencyContactName = value;
+    }
+
+    /// <summary>
+    /// OBSOLETO: Usar EmergencyContactPhone
+    /// </summary>
+    [Obsolete("Usar EmergencyContactPhone en su lugar")]
+    public string? EmergencyPhone
+    {
+        get => EmergencyContactPhone;
+        set => EmergencyContactPhone = value;
+    }
+
+    /// <summary>
+    /// OBSOLETO: Usar PhotoPath
+    /// </summary>
+    [Obsolete("Usar PhotoPath en su lugar")]
+    public string? PhotoBase64
+    {
+        get => PhotoPath;
+        set => PhotoPath = value;
+    }
+
+    /// <summary>
+    /// OBSOLETO: Codigo de barras (no se usa actualmente)
+    /// </summary>
+    [Obsolete("Esta propiedad no se usa")]
+    public string? Barcode { get; set; }
+
+    #endregion
 }

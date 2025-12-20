@@ -1,6 +1,12 @@
 ﻿using System.Windows;
 using GymManager.WPF.ViewModels;
+using GymManager.WPF.ViewModels.Classes;
 using GymManager.WPF.ViewModels.Members;
+using GymManager.WPF.ViewModels.Memberships;
+using GymManager.WPF.ViewModels.Payments;
+using GymManager.WPF.ViewModels.Reports;
+using GymManager.WPF.ViewModels.Sales;
+using GymManager.WPF.ViewModels.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GymManager.WPF;
@@ -12,7 +18,6 @@ public partial class MainWindow : Window
 {
     private readonly MainViewModel _viewModel;
     private readonly IServiceProvider _serviceProvider;
-    private MembersViewModel? _membersViewModel;
 
     public MainWindow(MainViewModel viewModel, IServiceProvider serviceProvider)
     {
@@ -21,141 +26,74 @@ public partial class MainWindow : Window
         _serviceProvider = serviceProvider;
         DataContext = _viewModel;
 
-        // Configurar el DataContext de MembersView
-        _membersViewModel = _serviceProvider.GetRequiredService<MembersViewModel>();
-        MembersViewControl.DataContext = _membersViewModel;
-
-        // Cargar miembros cuando se muestre la vista
-        _viewModel.PropertyChanged += async (s, e) =>
-        {
-            if (e.PropertyName == nameof(MainViewModel.ShowMembers) && _viewModel.ShowMembers)
-            {
-                if (_membersViewModel != null)
-                {
-                    await _membersViewModel.LoadMembersAsync();
-                }
-            }
-        };
+        ConfigureViewModels();
 
         // Cargar dashboard al iniciar
         Loaded += MainWindow_Loaded;
     }
 
+    private void ConfigureViewModels()
+    {
+        // Members
+        var membersViewModel = _serviceProvider.GetRequiredService<MembersViewModel>();
+        MembersViewControl.DataContext = membersViewModel;
+
+        // Memberships
+        var membershipsViewModel = _serviceProvider.GetRequiredService<MembershipsViewModel>();
+        MembershipsViewControl.DataContext = membershipsViewModel;
+
+        // Payments
+        var paymentsViewModel = _serviceProvider.GetRequiredService<PaymentsViewModel>();
+        PaymentsViewControl.DataContext = paymentsViewModel;
+
+        // Sales
+        var salesViewModel = _serviceProvider.GetRequiredService<SalesViewModel>();
+        SalesViewControl.DataContext = salesViewModel;
+
+        // Classes
+        var classesViewModel = _serviceProvider.GetRequiredService<ClassesViewModel>();
+        ClassesViewControl.DataContext = classesViewModel;
+
+        // Reports
+        var reportsViewModel = _serviceProvider.GetRequiredService<ReportsViewModel>();
+        ReportsViewControl.DataContext = reportsViewModel;
+
+        // Settings
+        var settingsViewModel = _serviceProvider.GetRequiredService<SettingsViewModel>();
+        SettingsViewControl.DataContext = settingsViewModel;
+
+        // Configurar carga de datos al mostrar cada vista
+        _viewModel.PropertyChanged += async (s, e) =>
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(MainViewModel.ShowMembers) when _viewModel.ShowMembers:
+                    await membersViewModel.LoadMembersAsync();
+                    break;
+                case nameof(MainViewModel.ShowMemberships) when _viewModel.ShowMemberships:
+                    await membershipsViewModel.InitializeAsync();
+                    break;
+                case nameof(MainViewModel.ShowPayments) when _viewModel.ShowPayments:
+                    await paymentsViewModel.InitializeAsync();
+                    break;
+                case nameof(MainViewModel.ShowSales) when _viewModel.ShowSales:
+                    await salesViewModel.InitializeAsync();
+                    break;
+                case nameof(MainViewModel.ShowClasses) when _viewModel.ShowClasses:
+                    await classesViewModel.InitializeAsync();
+                    break;
+                case nameof(MainViewModel.ShowReports) when _viewModel.ShowReports:
+                    await reportsViewModel.InitializeAsync();
+                    break;
+                case nameof(MainViewModel.ShowSettings) when _viewModel.ShowSettings:
+                    await settingsViewModel.InitializeAsync();
+                    break;
+            }
+        };
+    }
+
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         await _viewModel.LoadDashboardAsync();
-    }
-
-    // ═══════════════════════════════════════════════════════════
-    // NAVEGACION DEL MENU (si se usan eventos Click en XAML)
-    // ═══════════════════════════════════════════════════════════
-
-    private void OnDashboardClick(object sender, RoutedEventArgs e)
-    {
-        NavigateTo("Dashboard");
-    }
-
-    private void OnMembersClick(object sender, RoutedEventArgs e)
-    {
-        NavigateTo("Members");
-    }
-
-    private void OnMembershipsClick(object sender, RoutedEventArgs e)
-    {
-        NavigateTo("Memberships");
-    }
-
-    private void OnPaymentsClick(object sender, RoutedEventArgs e)
-    {
-        NavigateTo("Payments");
-    }
-
-    private void OnClassesClick(object sender, RoutedEventArgs e)
-    {
-        NavigateTo("Classes");
-    }
-
-    private void OnSalesClick(object sender, RoutedEventArgs e)
-    {
-        NavigateTo("Sales");
-    }
-
-    private void OnReportsClick(object sender, RoutedEventArgs e)
-    {
-        NavigateTo("Reports");
-    }
-
-    private void OnSettingsClick(object sender, RoutedEventArgs e)
-    {
-        NavigateTo("Settings");
-    }
-
-    private async void NavigateTo(string view)
-    {
-        // Ocultar todas las vistas
-        _viewModel.ShowDashboard = false;
-        _viewModel.ShowMembers = false;
-        _viewModel.ShowMemberForm = false;
-
-        switch (view)
-        {
-            case "Dashboard":
-                _viewModel.ShowDashboard = true;
-                _viewModel.Title = "GymManager - Dashboard";
-                await _viewModel.LoadDashboardAsync();
-                break;
-
-            case "Members":
-                _viewModel.ShowMembers = true;
-                _viewModel.Title = "GymManager - Miembros";
-                break;
-
-            case "Memberships":
-                _viewModel.Title = "GymManager - Membresias";
-                MessageBox.Show("Modulo de Membresias en desarrollo", "Proximamente",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                _viewModel.ShowDashboard = true;
-                break;
-
-            case "Payments":
-                _viewModel.Title = "GymManager - Pagos";
-                MessageBox.Show("Modulo de Pagos en desarrollo", "Proximamente",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                _viewModel.ShowDashboard = true;
-                break;
-
-            case "Classes":
-                _viewModel.Title = "GymManager - Clases";
-                MessageBox.Show("Modulo de Clases en desarrollo", "Proximamente",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                _viewModel.ShowDashboard = true;
-                break;
-
-            case "Sales":
-                _viewModel.Title = "GymManager - Ventas";
-                MessageBox.Show("Modulo de Ventas en desarrollo", "Proximamente",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                _viewModel.ShowDashboard = true;
-                break;
-
-            case "Reports":
-                _viewModel.Title = "GymManager - Reportes";
-                MessageBox.Show("Modulo de Reportes en desarrollo", "Proximamente",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                _viewModel.ShowDashboard = true;
-                break;
-
-            case "Settings":
-                _viewModel.Title = "GymManager - Configuracion";
-                MessageBox.Show("Modulo de Configuracion en desarrollo", "Proximamente",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                _viewModel.ShowDashboard = true;
-                break;
-
-            default:
-                _viewModel.ShowDashboard = true;
-                _viewModel.Title = "GymManager - Dashboard";
-                break;
-        }
     }
 }

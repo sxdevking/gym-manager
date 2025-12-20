@@ -1,0 +1,587 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Projects\\gym-manager\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\viewmodels\\classes\\classesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\viewmodels\\classes\\classesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|d:\\projects\\gym-manager\\src\\gymmanager.wpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EE8FA5A-D2F5-44E6-B3F8-CC630048CDE1}|src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.infrastructure\\gymmanager.infrastructure.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{3EE8FA5A-D2F5-44E6-B3F8-CC630048CDE1}|src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj|solutionrelative:src\\gymmanager.infrastructure\\gymmanager.infrastructure.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EE8FA5A-D2F5-44E6-B3F8-CC630048CDE1}|src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.infrastructure\\services\\licensing\\licensingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EE8FA5A-D2F5-44E6-B3F8-CC630048CDE1}|src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj|solutionrelative:src\\gymmanager.infrastructure\\services\\licensing\\licensingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EE8FA5A-D2F5-44E6-B3F8-CC630048CDE1}|src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.infrastructure\\services\\licensing\\dongleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EE8FA5A-D2F5-44E6-B3F8-CC630048CDE1}|src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj|solutionrelative:src\\gymmanager.infrastructure\\services\\licensing\\dongleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\converters\\stringtovisibilityconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\converters\\stringtovisibilityconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\settings\\settingsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\settings\\settingsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\resources\\fluentstyles.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\resources\\fluentstyles.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\settings\\settingsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\settings\\settingsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\reports\\reportsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\reports\\reportsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\reports\\reportsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\reports\\reportsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\classes\\classesview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\classes\\classesview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\classes\\classesview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\classes\\classesview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\sales\\salesview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\sales\\salesview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\sales\\salesview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\sales\\salesview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\payments\\paymentsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\payments\\paymentsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\payments\\paymentsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\payments\\paymentsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\viewmodels\\settings\\settingsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\viewmodels\\settings\\settingsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\viewmodels\\reports\\reportsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\viewmodels\\reports\\reportsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\memberships\\membershipsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\memberships\\membershipsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\memberships\\membershipsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\memberships\\membershipsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\viewmodels\\sales\\salesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\viewmodels\\sales\\salesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\viewmodels\\payments\\paymentsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\viewmodels\\payments\\paymentsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\viewmodels\\memberships\\membershipsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\viewmodels\\memberships\\membershipsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\members\\memberformwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\members\\memberformwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\viewmodels\\members\\memberformviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\viewmodels\\members\\memberformviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D4171004-AC43-4639-BE7B-AE370D411B7B}|src\\GymManager.Domain\\GymManager.Domain.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.domain\\data\\mexicogeographydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D4171004-AC43-4639-BE7B-AE370D411B7B}|src\\GymManager.Domain\\GymManager.Domain.csproj|solutionrelative:src\\gymmanager.domain\\data\\mexicogeographydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\views\\members\\memberformwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\views\\members\\memberformwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\behaviors\\inputbehaviors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\behaviors\\inputbehaviors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\converters\\nullvisibilityconverters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\converters\\nullvisibilityconverters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|D:\\Projects\\gym-manager\\src\\gymmanager.wpf\\resources\\fluentstyles.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{37CB31B9-6C2D-4FB0-94B0-600B855648A9}|src\\GymManager.WPF\\GymManager.WPF.csproj|solutionrelative:src\\gymmanager.wpf\\resources\\fluentstyles.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "App.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\App.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\App.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\App.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T06:37:18.992Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\App.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\App.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\App.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\App.xaml.cs",
+              "ViewState": "AQIAAHIAAAAAAAAAAADwv34AAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:37:33.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "FluentStyles.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Resources\\FluentStyles.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Resources\\FluentStyles.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Resources\\FluentStyles.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Resources\\FluentStyles.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T03:27:32.257Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "StringToVisibilityConverter.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Converters\\StringToVisibilityConverter.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Converters\\StringToVisibilityConverter.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Converters\\StringToVisibilityConverter.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Converters\\StringToVisibilityConverter.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:40:16.415Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ClassesViewModel.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Classes\\ClassesViewModel.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\ViewModels\\Classes\\ClassesViewModel.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Classes\\ClassesViewModel.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\ViewModels\\Classes\\ClassesViewModel.cs",
+              "ViewState": "AQIAAHsAAAAAAAAAAADwv44AAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:14:12.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GymManager.Infrastructure",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj",
+              "RelativeDocumentMoniker": "src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj",
+              "RelativeToolTip": "src\\GymManager.Infrastructure\\GymManager.Infrastructure.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-20T07:43:16.126Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\MainWindow.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\MainWindow.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T06:38:44.899Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SettingsView.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Settings\\SettingsView.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Settings\\SettingsView.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Settings\\SettingsView.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Settings\\SettingsView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T06:48:49.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LicensingService.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.Infrastructure\\Services\\Licensing\\LicensingService.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.Infrastructure\\Services\\Licensing\\LicensingService.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.Infrastructure\\Services\\Licensing\\LicensingService.cs",
+              "RelativeToolTip": "src\\GymManager.Infrastructure\\Services\\Licensing\\LicensingService.cs",
+              "ViewState": "AQIAAGoBAAAAAAAAAAAwwJABAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T07:20:30.126Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DongleService.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.Infrastructure\\Services\\Licensing\\DongleService.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.Infrastructure\\Services\\Licensing\\DongleService.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.Infrastructure\\Services\\Licensing\\DongleService.cs",
+              "RelativeToolTip": "src\\GymManager.Infrastructure\\Services\\Licensing\\DongleService.cs",
+              "ViewState": "AQIAAMQAAAAAAAAAAAAwwOoAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T07:20:58.396Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\appsettings.json",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\appsettings.json",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\appsettings.json",
+              "RelativeToolTip": "src\\GymManager.WPF\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-20T07:21:25.607Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SettingsView.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Settings\\SettingsView.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Settings\\SettingsView.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Settings\\SettingsView.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Settings\\SettingsView.xaml.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAowBMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:49:13.047Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ReportsView.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Reports\\ReportsView.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Reports\\ReportsView.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Reports\\ReportsView.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Reports\\ReportsView.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:48:00.317Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ReportsView.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Reports\\ReportsView.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Reports\\ReportsView.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Reports\\ReportsView.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Reports\\ReportsView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T06:47:42.337Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ClassesView.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Classes\\ClassesView.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Classes\\ClassesView.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Classes\\ClassesView.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Classes\\ClassesView.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:46:47.551Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ClassesView.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Classes\\ClassesView.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Classes\\ClassesView.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Classes\\ClassesView.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Classes\\ClassesView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T06:46:32.135Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "SalesView.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Sales\\SalesView.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Sales\\SalesView.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Sales\\SalesView.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Sales\\SalesView.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:45:37.458Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "SalesView.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Sales\\SalesView.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Sales\\SalesView.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Sales\\SalesView.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Sales\\SalesView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T06:45:25.464Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "PaymentsView.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Payments\\PaymentsView.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Payments\\PaymentsView.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Payments\\PaymentsView.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Payments\\PaymentsView.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:44:33.623Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "PaymentsView.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Payments\\PaymentsView.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Payments\\PaymentsView.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Payments\\PaymentsView.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Payments\\PaymentsView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T06:44:02.146Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\ViewModels\\MainViewModel.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\MainViewModel.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\ViewModels\\MainViewModel.cs",
+              "ViewState": "AQIAAMkAAAAAAAAAAAAswOkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:41:18.935Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\MainWindow.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\MainWindow.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\MainWindow.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFcAAABVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:39:30.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "MembershipsView.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Memberships\\MembershipsView.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Memberships\\MembershipsView.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Memberships\\MembershipsView.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Memberships\\MembershipsView.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAIwBMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:17:30.545Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "ReportsViewModel.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Reports\\ReportsViewModel.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\ViewModels\\Reports\\ReportsViewModel.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Reports\\ReportsViewModel.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\ViewModels\\Reports\\ReportsViewModel.cs",
+              "ViewState": "AQIAAPcAAAAAAAAAAAAmwAsBAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:14:45.953Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "SettingsViewModel.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Settings\\SettingsViewModel.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\ViewModels\\Settings\\SettingsViewModel.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Settings\\SettingsViewModel.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\ViewModels\\Settings\\SettingsViewModel.cs",
+              "ViewState": "AQIAACwBAAAAAAAAAAAWwDkBAABCAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:15:16.063Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "MembershipsView.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Memberships\\MembershipsView.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Memberships\\MembershipsView.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Memberships\\MembershipsView.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Memberships\\MembershipsView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T06:17:00.872Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "SalesViewModel.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Sales\\SalesViewModel.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\ViewModels\\Sales\\SalesViewModel.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Sales\\SalesViewModel.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\ViewModels\\Sales\\SalesViewModel.cs",
+              "ViewState": "AQIAAKIAAAAAAAAAAAAAAKsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T06:10:11.597Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "PaymentsViewModel.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Payments\\PaymentsViewModel.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\ViewModels\\Payments\\PaymentsViewModel.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Payments\\PaymentsViewModel.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\ViewModels\\Payments\\PaymentsViewModel.cs",
+              "ViewState": "AQIAAOUAAAAAAAAAAADwvwwBAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T05:57:25.996Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "MembershipsViewModel.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Memberships\\MembershipsViewModel.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\ViewModels\\Memberships\\MembershipsViewModel.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Memberships\\MembershipsViewModel.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\ViewModels\\Memberships\\MembershipsViewModel.cs",
+              "ViewState": "AQIAANoAAAAAAAAAAAAAAOgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T05:49:56.16Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "MexicoGeographyData.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.Domain\\Data\\MexicoGeographyData.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.Domain\\Data\\MexicoGeographyData.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.Domain\\Data\\MexicoGeographyData.cs",
+              "RelativeToolTip": "src\\GymManager.Domain\\Data\\MexicoGeographyData.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADQBAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T04:02:52.41Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "MemberFormWindow.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Members\\MemberFormWindow.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Members\\MemberFormWindow.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Members\\MemberFormWindow.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Members\\MemberFormWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T02:24:52.132Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "MemberFormViewModel.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Members\\MemberFormViewModel.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\ViewModels\\Members\\MemberFormViewModel.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\ViewModels\\Members\\MemberFormViewModel.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\ViewModels\\Members\\MemberFormViewModel.cs",
+              "ViewState": "AQIAALIDAAAAAAAAAAAQwNEDAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T02:23:15.719Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "MemberFormWindow.xaml.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Members\\MemberFormWindow.xaml.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Views\\Members\\MemberFormWindow.xaml.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Views\\Members\\MemberFormWindow.xaml.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Views\\Members\\MemberFormWindow.xaml.cs",
+              "ViewState": "AQIAAGEAAAAAAAAAAAAkwIcAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T02:23:47.917Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "InputBehaviors.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Behaviors\\InputBehaviors.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Behaviors\\InputBehaviors.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Behaviors\\InputBehaviors.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Behaviors\\InputBehaviors.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAMMAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T02:30:38.175Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "NullVisibilityConverters.cs",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Converters\\NullVisibilityConverters.cs",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Converters\\NullVisibilityConverters.cs",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Converters\\NullVisibilityConverters.cs",
+              "RelativeToolTip": "src\\GymManager.WPF\\Converters\\NullVisibilityConverters.cs",
+              "ViewState": "AQIAABkAAAAAAAAAAAAzwCQAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-20T02:40:44.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "FluentStyles.xaml",
+              "DocumentMoniker": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Resources\\FluentStyles.xaml",
+              "RelativeDocumentMoniker": "src\\GymManager.WPF\\Resources\\FluentStyles.xaml",
+              "ToolTip": "D:\\Projects\\gym-manager\\src\\GymManager.WPF\\Resources\\FluentStyles.xaml",
+              "RelativeToolTip": "src\\GymManager.WPF\\Resources\\FluentStyles.xaml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwEYCAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-20T02:22:35.494Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
